@@ -28,7 +28,7 @@
 								</div>
 								<div class="invoice p-5">
 									<h5 class="display-4 font-weight-bold">주문 확인</h5>
-									<span class="font-weight-bold d-block mt-4">ㅇㅇㅇ 님</span>
+									<span class="font-weight-bold d-block mt-4">받으시는 분 : [[${plist2[0].purchase_rec}]]</span>
 									<span>상품 배송에는 2~3일이 소요될 예정입니다</span>
 									<div
 										class="payment border-top mt-3 mb-3 border-bottom table-responsive">
@@ -75,8 +75,8 @@
 													<td width="60%"><span class="font-weight-bold" th:text="${purchase.product_name}"></span>
 														<div class="product-qty">
 														<th:block th:switch="${path}">
-															<span class="d-block" th:case="b" th:text="|수량 : ${purchase.product_cnt}|"></span> <span></span>
-															<span class="d-block" th:case="a" th:text="|수량 : ${cnt}|"></span> <span></span>
+															<span class="d-block" th:case="a" th:text="|수량 : ${purchase.product_cnt}|"></span> <span></span>
+															<span class="d-block" th:case="b" th:text="|수량 : ${cnt}|"></span> <span></span>
 														</th:block>
 
 														</div></td>
@@ -116,7 +116,8 @@
 														</td>
 														<td>
 															<div class="text-right">
-																<span>3000</span>
+																<span th:if="${purchase_total} >= 50000">0</span>
+																<span th:if="${purchase_total} < 50000">3000</span>
 															</div>
 														</td>
 													</tr>
@@ -158,7 +159,8 @@
 														</td>
 														<td>
 															<div class="text-right">
-																<span class="font-weight-bold" th:text="${purchase_total}"></span>
+																<span class="font-weight-bold" th:if="${purchase_total} >= 50000" th:text="${purchase_total}"></span>
+																<span class="font-weight-bold" th:if="${purchase_total} < 50000" th:text="${purchase_total} + 3000"></span>
 															</div>
 														</td>
 													</tr>

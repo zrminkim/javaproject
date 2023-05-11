@@ -36,7 +36,7 @@ public class CartController {
 		
 		int user_num = Integer.parseInt(session.getAttribute("user_no").toString());
 		
-		System.out.println(user_num);
+		//System.out.println(user_num);
 		ArrayList<CartDto> list = (ArrayList<CartDto>) cartDao.getDataAll(user_num); // user_num 임의로 부여. 로그인 완성 후 값 받아오도록 수정
 		int user_cash = cartDao.selectUserCash(user_num);
 		int totalSum = 0; // 장바구니 내 상품들의 총합 구하기
@@ -78,16 +78,21 @@ public class CartController {
 	
 	@GetMapping("addCart")
 	public String addCartProcess(HttpServletRequest request, HttpServletResponse response, @RequestParam("product_num") int product_num, @RequestParam("cart_cnt") int cart_cnt) {
-		
+
 		HttpSession session = request.getSession();
 		int user_num = Integer.parseInt(session.getAttribute("user_no").toString());
-		
-		boolean b = cartDao.addCartProcess(user_num, product_num, cart_cnt);
+		List<CartDto> list = cartDao.selectCartbyProductNo(product_num, user_num);
+		boolean b = false;
+		if(list.isEmpty()) {
+			b = cartDao.addCartProcess(user_num, product_num, cart_cnt);
+		} else {
+			b = cartDao.UpdateCartCnt(cart_cnt, product_num);
+		}
+
 		if (b) { // 삭제 성공시 장바구니 갱신
 			return "redirect:/";
 		} else { // 실패시 메인으로 이동(에러페이지 작성완료시 에러 페이지로 변경)
-			return "redirect:/main";
+			return "redirect:/error";
 		}
-		
 	}
 }

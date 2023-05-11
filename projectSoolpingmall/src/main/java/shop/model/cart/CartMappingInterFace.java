@@ -18,10 +18,15 @@ public interface CartMappingInterFace {
 	@Select("select user_cash from user where user_no = #{user_no}")
 	int selectUserCash(int user_no);
 	
+	@Select("select * from cart where product_num = #{product_num} and user_num = #{user_num}")
+	List<CartDto> selectCartByProductNo(@Param("product_num") int product_num, @Param("user_num") int user_num);
+	
 	@Delete("delete from cart where product_num = #{product_num} and user_num = #{user_num}")	// 상세 페이지  완성시 조건을 cart_no로 변경
 	int DeleteProduct(@Param("product_num") int product_num, @Param("user_num")int user_num);
 	
 	@Insert("insert into cart (user_num, product_num, cart_cnt) values(#{user_num}, #{product_num}, #{cart_cnt})")
 	int addCart(@Param("user_num")int user_num,@Param("product_num") int product_num,@Param("cart_cnt") int cart_cnt);
 	
+	@Update("update cart set cart_cnt = cart_cnt + #{cart_cnt} where product_num = #{product_num}")
+	int UpdateCartCnt(@Param("cart_cnt") int cart_cnt, @Param("product_num") int product_num);
 }

@@ -57,6 +57,7 @@ public class PurchaseDao {
 
 	public boolean insertPurchaseData(PurchaseBean bean) {
 		boolean b = false;
+		if(bean.getPurchase_total() < 50000) bean.setPurchase_total(bean.getPurchase_total() + 3000);	// 총 주문 금액 5만원 미만일 시 배송비 부과
 		int re = purchaseMappingInterface.insertPurchsaeData(bean);
 		if (re > 0)
 			b = true;
@@ -117,11 +118,4 @@ public class PurchaseDao {
 		int randomNumber = random.nextInt(10000000);
 		return String.format("%010d" + Integer.toString(user_num), randomNumber);
 	}
-	
-	public int countCart() {
-		int re = purchaseMappingInterface.cartCount();
-		
-		return re;
-	}
-
 }

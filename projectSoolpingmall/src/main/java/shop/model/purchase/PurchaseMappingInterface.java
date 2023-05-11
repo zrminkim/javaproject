@@ -36,9 +36,6 @@ public interface PurchaseMappingInterface {
 	@Select("select * from purchase where purchase_no = #{purchase_no}")
 	List<PurchaseBean> selectPurchase2(@Param("purchase_no") String purchase_no);
 	
-	@Select("select count(*) from cart;")
-	int cartCount();
-	
 	@Insert("insert into purchase (user_num, purchase_total, purchase_rec, purchase_zipcode, purchase_addr1, purchase_addr2, purchase_tel, purchase_email, purchase_req, purchase_upoint, purchase_orderno) values(#{user_num}, #{purchase_total}, #{purchase_rec}, #{purchase_zipcode}, #{purchase_addr1}, #{purchase_addr2}, #{purchase_tel}, #{purchase_email}, #{purchase_req}, #{purchase_upoint}, #{purchase_orderno})")
 	@Options(useGeneratedKeys = true, keyProperty = "purchase_no") 
 	int insertPurchsaeData(PurchaseBean bean);
@@ -49,6 +46,7 @@ public interface PurchaseMappingInterface {
 	@Delete("delete from cart where user_num = #{user_num}")
 	int deleteCartProduct(int user_num);
 	
+	// 주문후 유저 캐쉬, 포인트 업데이트
 	@Update("update user set user_cash = #{updateCash}, user_point=#{updatePoint} where user_no = #{user_num}")	// 임시 유저 번호
 	int updateUserCash(@Param("updateCash") int updateCash, @Param("updatePoint") int updatePoint, @Param("user_num") int user_num);
 	

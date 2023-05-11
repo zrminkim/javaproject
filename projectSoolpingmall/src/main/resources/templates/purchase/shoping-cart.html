@@ -70,7 +70,7 @@
 											<h5></h5>
                                     </td>
                                     </th:block>
-										<td class="shoping__cart__price" th:text="${product.product_price}" th:id="|product_price_${product.product_name}|">
+										<td class="shoping__cart__price" th:text="${product.product_price}" th:id="|product_price_${product.product_num}|">
 											<input type="hidden" th:name="product_price"
 											th:value="${product.product_price}" th:id="|product_price_${product.product_name}|">
 										</td>
@@ -78,37 +78,15 @@
                                         <div class="quantity">
                                             <div class="pro-qty">
                                                <input type="number" min="1" th:value="${product.cart_cnt}" th:class="cart_cnt" 
-      													 th:data-product-name="${product.product_name}" name="cart_cnt[]">
+      													 th:data-product-num="${product.product_num}" name="cart_cnt[]">
                                             </div>
-                                            	
-                                            	<!-- 수량 버튼 클릭시 상품 수량 변경과 금액, 총액 변경 -->
-                                            <script>
-                                            
-                                            $(document).ready(function() { 
-                                            	  $(".cart_cnt").change(function(){
-                                            	   var cnt = $(this).val();
-                                            	console.log(cnt)
-                                            	    var product_name = $(this).data("product-name");
-                                            	    var price = document.getElementById("product_price_" + product_name).innerText;
-                                            	    var total = cnt * price;
-                                            	    $("#total_" + product_name).text(total);
-                                            	    $("#total_" + product_name).val(total); 
-
-                                            	    var sum = 0;
-                                            	    $(".total").each(function(){
-                                            	      sum += Number($(this).text());
-                                            	    });
-                                            	    $("#sum").text(sum);
-                                            	    $("#sum").data("sum", sum)
-                                            	  });
-                                            	});
-											</script>
+                          
                                         </div>
                                     </td>
-                                    <td class="shoping__cart__total" th:text="${product.total}" th:id="|total_${product.product_name}|" th:class="total">
+                                    <td class="shoping__cart__total" th:id="|total_${product.product_num}|" th:class="total">
 											<input type="hidden" th:name="|total_${product.product_name}|"
-											th:value="${product.cart_cnt} * ${product.product_price}" th:id="total">
-										</td>
+											th:id="total" th:text="${product.cart_cnt} * ${product.product_price}">
+									</td>
                                     <td class="shoping__cart__item__close"  th:data-product-num="${product.product_num}">
                                         <span class="icon_close" th:onclick="'confirmDelete(' + ${product.product_num} + ')'"></span>
                                         <script>	// 상품 삭제 구현 ajax 스크립트
@@ -131,6 +109,27 @@
 											</script>
                                     </td> 
                                 </tr>
+                                <!-- 수량 버튼 클릭시 상품 수량 변경과 금액, 총액 변경 -->
+                                   			<script>
+
+                                            $(document).ready(function() { 
+                                          	  $(".cart_cnt").change(function(){
+                                          	   	var cnt = $(this).val();
+                                          	    var product_num = $(this).data("product-num");
+                                          	    var price = document.getElementById("product_price_" + product_num).innerText;
+                                          	    var total = cnt * price;
+                                          	    $("#total_" + product_num).text(total);
+                                          	  //$("#total_" + product_name).val(total); 
+                                          	    var sum = 0;
+                                      
+                                          	    $(".total").each(function(){
+                                          	      sum += Number($(this).text());
+                                          	    });
+                                          	    $("#sum").text(sum);
+                                          	    $("#sum").data("sum", sum)
+                                          	  });
+                                          	});
+											</script>
                          	</th:block>
                             </tbody>
                         </table>
@@ -141,7 +140,7 @@
                 <div class="col-lg-12">
                     <div class="shoping__cart__btns">
                         <a href="home" class="primary-btn cart-btn" th:text="|쇼핑 계속하기|"></a>
-                        <a href="#" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading" th:text="|장바구니 업데이트|"></span>
+                        <a href="cart" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading" th:text="|장바구니 초기화|"></span>
                             </a>
                     </div>
                 </div>

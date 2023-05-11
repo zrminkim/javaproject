@@ -306,6 +306,7 @@
 											<div class="checkout__order__total" th:case="'a'">
 												최종 결제 금액 <span th:text="${sum}" th:id="total_price"></span>
 												<input type="hidden" th:value="${sum}" th:name="purchase_total" th:id="purchase_total">
+												<input type="hidden" th:value="a" th:name="path">
 											</div>
 											<div class="checkout__order__total" th:case="'b'" th:each="product:${clist}">
 												최종 결제 금액
@@ -314,6 +315,7 @@
 												<input type="hidden" th:value="${product.product_price * cnt}" th:name="purchase_total" th:id="purchase_total">
 												<input type="hidden" th:value="${cnt}" th:name="cnt">
 												<input type="hidden" th:value="${product.product_no}" th:name="product_no">
+												<input type="hidden" th:value="b" th:name="path">
 											</div>
 											</th:block>
 								
