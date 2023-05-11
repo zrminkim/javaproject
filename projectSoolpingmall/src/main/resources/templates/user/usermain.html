@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"> <!-- default layout 사용 -->
+      
+
+<!-- 페이지의 개별적인 css, js 설정 영역 -->
+<!-- thymeleaf layout dialect가 content페이지의 head태그를 layout의 head태그에 자동으로 추가해준다. -->
+    <title>술핑몰</title>
+
+<!-- 페이지의 실제 content 내용 -->
+
+<div layout:fragment="contentFragment">
+
+    <!-- Hero Section Begin -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+<div class="d-flex" id="wrapper">
+<!-- 			<div th:replace="usersidebar::sidebar">top 영역ㅡㅜ\ㅁㄹ챰뉴ㅜㅊ</div> -->
+
+		<div th:insert="~{user/usersidebar::sidebar}"></div>
+
+
+            <!-- Page content wrapper-->
+                <!-- Page content-->
+                <div class="container-fluid" style="width: 580px;">
+                    <h1 class="mt-4">주문내역</h1>
+                    
+                    <div class="container">
+</div>
+
+<table class="table table-bordered"> 
+
+<thead>
+   <tr>
+      <th>배송조회></th>
+      <th>결제완료></th>
+      <th>배송중 ></th>
+      <th>배송완료></th>
+      <th>취소   ></th>
+   </tr>
+ </thead>
+ <tbody>
+   <tr>
+      <td ></td>
+      <td><p th:if="${#strings.isEmpty(purchaseP['P'])}" th:text="0"></p></td>
+      <td><p th:if="${#strings.isEmpty(purchaseP['D'])}" th:text="0"></p></td>
+      <td><p th:if="${#strings.isEmpty(purchaseP['F'])}" th:text="0"></p></td>
+      <td><p th:if="${#strings.isEmpty(purchaseP['C'])}" th:text="0"></p></td>
+   </tr>
+ </tbody>  
+
+</table>
+
+
+</div>
+</div></div>
+
+
+
+            </div>
+    </section>
+    <!-- Blog Section End -->
+
+</div>
+</html>

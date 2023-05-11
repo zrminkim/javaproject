@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="navigationFragment">
+
+ <!-- Page Preloder -->
+
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Humberger Begin -->
+    <div class="humberger__menu__overlay"></div>
+    <div class="humberger__menu__wrapper">
+        <div class="humberger__menu__logo">
+            <a href="/"><img src="img/logo.png" alt=""></a>
+        </div>
+        <div class="humberger__menu__cart">
+            <ul>
+                <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                <li><a href="cart"><i class="fa fa-shopping-bag"></i></a></li>
+            </ul>
+            
+        </div>
+        <div class="humberger__menu__widget">
+            
+            <div class="header__top__right__auth">
+           		<th:block th:if="${#strings.isEmpty(session.user_no)}"> <!-- 로그인 상태 X -->
+                           <a href="login" style="padding-right: 30px;"><i class="fa fa-user"></i> Login</a>
+                           <a href="signUp" style="padding-right: 30px;"><i class="fa fa-user"></i>Sign Up</a>					
+				</th:block>
+				
+				<th:block th:if="${not #strings.isEmpty(session.user_no)}"> <!-- 로그인 상태 O -->
+                           <a href="logout" style="padding-right: 30px;"><i class="fa fa-user"></i> Logout</a>
+                           <a href="/userInfo"><i class="fa fa-user"></i> Mypage</a>
+				</th:block>
+            </div>
+        </div>
+        <nav class="humberger__menu__nav mobile-menu">
+            <ul>
+            				
+                            <li><a href="#">경매</a></li>
+                            <li><a href="#">커뮤니티</a>
+                            <ul class="header__menu__dropdown">
+                                    <li><a href="#">이벤트</a></li>
+                                    <li><a href="#">공지사항</a></li>
+                                    
+                                </ul>
+                                </li>
+                            <li><a href="#">취향</a></li>
+                        </ul>
+        </nav>
+        <div id="mobile-menu-wrap"></div>
+       
+        <div class="humberger__menu__contact">
+            
+        </div>
+    </div>
+    <!-- Humberger End -->
+
+    <!-- Header Section Begin -->
+    <header class="header">
+        <div class="header__top">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6"></div>
+            <div class="col-lg-6 col-md-6">
+                <div class="header__top__right">
+                    <div class="header__top__right__social"><a href="#"> </a></div>
+                    <div class="header__top__right__auth" >
+                        <div class="row">
+                            <th:block th:if="${#strings.isEmpty(session.user_no)}"> <!-- 로그인 상태 X -->
+                            
+	                            <a href="login" style="padding-right: 30px;"><i class="fa fa-user"></i> Login</a>
+	                            <a href="signUp" style="padding-right: 30px;"><i class="fa fa-user"></i>Sign Up</a>					
+							</th:block>
+					
+							<th:block th:if="${not #strings.isEmpty(session.user_no)}"> <!-- 로그인 상태 O -->
+								
+                                <li id="sessionCounter" class="nav-item" style="list-style-type: none; margin-right: 20px; font-size:11px;">
+									<span id="counter"></span>
+								</li>
+                                
+		                            <a href="logout" style="padding-right: 30px;"><i class="fa fa-user"></i> Logout</a>
+		                            <a href="/userInfo"><i class="fa fa-user"></i> Mypage</a>
+							</th:block>
+	                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="header__logo">
+                        <a href="/"><img src="img/logo.png" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <nav class="header__menu">
+                        <ul>
+                            
+                            <li><a href="auctionuser">경매</a></li>
+                            <li><a href="#">커뮤니티</a>
+                            <ul class="header__menu__dropdown">
+                                    <li><a href="#">준비중</a></li>
+                                    <li><a href="#">준비중</a></li>
+                                </ul>
+                                </li>
+                            <li><a href="#">취향</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-3">
+                    <div class="header__cart">
+                        <ul>
+                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                            <li><a href="cart"><i class="fa fa-shopping-bag"></i></a></li>
+                        </ul>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="humberger__open">
+                <i class="fa fa-bars"></i>
+            </div>
+        </div>
+    </header>
+    <!-- Header Section End -->
+    
+    <!-- Hero Section Begin -->
+    <section class="hero hero-normal">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="hero__categories">
+                        <div class="hero__categories__all">
+                            <i class="fa fa-bars"></i>
+                            <span>카테고리</span>
+                        </div>
+                        <ul class="hero__categories__list">
+                          <li><a href="/sojucategory">소주</a></li>
+                            		<li><a href="/beercategory">맥주</a></li>
+                           			<li><a href="/winecategory">와인</a></li>
+                           		 <li><a href="/liqueurcategory">리큐르</a></li>
+                           		 <li><a href="/brandicategory">브랜디&꼬냑</a></li>
+                           		 <li><a href="/chinacategory">진</a></li>
+                           		 <li><a href="/japancategory">일본술</a></li>
+                          		  <li><a href="/tequilacategory">데킬라</a></li>
+                          		  <li><a href="/wiskeycategory">위스키</a></li>
+                           		 <li><a href="/vodkacategory">보드카</a></li>
+                           		 <li><a href="/champagnecategory">럼</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="hero__search">
+                        <div class="hero__search__form">
+                            <form class="d-flex" action="homeSearch" method="get">
+       
+      <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search" name="searchValue">
+      <button class="btn btn-outline-success" type="submit">Search</button>
+                   </form>
+                        </div>
+                        <div class="hero__search__phone">
+                            
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Hero Section End -->
+	<script type="text/javascript">
+
+        let tid;
+        let cnt = parseInt(1800); // 초기값(초단위)
+        
+        function counter_init(){ // 세션 카운트 실행
+            tid = setInterval("counter_run()",1000); // 1초씩 카운트 실행
+        }
+        
+        function time_format(s){
+            let hour = 0;
+            let min = 0;
+            let sec = 0;
+            if(s>0){
+                min = parseInt(s / 60);
+                sec = s % 60;
+                if(min > 60){
+                    hour = parseInt(min/60);
+                    min = min % 60;
+                }
+            }
+            if(sec < 10) sec = "0"+sec;
+            if(min < 10) min = "0"+min;
+            
+            
+            return hour+":"+min+":"+sec;
+            
+        }
+        
+        function counter_run(){ // 세션 카운트
+            //alert((time_format(cnt));
+            $("#counter").text(time_format(cnt)); // 세션 표시
+            cnt--;
+            if(cnt<0){ // 세션 기간 만료하면
+                clearInterval(tid); // 세션 카운트 지우기
+                cnt = parseInt(1800); // 카운트 초기화
+                alert("세션만료, 자동 로그아웃됨");// 로그아웃 팝업
+            }
+        }
+        $("#sessionCounter").onload = counter_init();
+        </script>
+</th:block>
+</html>

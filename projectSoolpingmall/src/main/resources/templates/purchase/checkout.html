@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/layout}">
+<!-- default layout 사용 -->
+<head>
+<meta charset="UTF-8">
+<meta name="description" content="Ogani Template">
+<meta name="keywords" content="Ogani, unica, creative, html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<!-- Google Font -->
+<link
+	href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap"
+	rel="stylesheet">
+
+<!-- Css Styles -->
+<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+<link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+<link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
+<link rel="stylesheet" href="css/nice-select.css" type="text/css">
+<link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
+<link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
+<link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+<link rel="stylesheet" href="css/style.css" type="text/css">
+
+</head>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+<!-- 페이지의 개별적인 css, js 설정 영역 -->
+<!-- thymeleaf layout dialect가 content페이지의 head태그를 layout의 head태그에 자동으로 추가해준다. -->
+<title>결제 페이지</title>
+
+
+
+<!-- 페이지의 실제 content 내용 -->
+
+<div layout:fragment="contentFragment">
+
+	<!-- Hero Section Begin -->
+	<section class="hero">
+		<div class="container">
+			<div class="row">
+
+				<!-- Checkout Section Begin -->
+				<section class="checkout spad">
+					<div class="container">
+
+						<div class="row">
+							<div class="col-lg-12">
+								<h6>
+									<span class="icon_tag_alt"></span><a href="#">쿠폰 입력으로 이동</a>
+								</h6>
+							</div>
+						</div>
+						<div class="container">
+							<div class="row">
+								<div class="checkout__form">
+									<div class="shoping__cart__table">
+										<h4>주문 상품 정보</h4>
+										<table>
+											<thead>
+												<tr>
+													<th class="shoping__product" th:text="상품"></th>
+													<th th:text="가격"></th>
+													<th th:text="수량"></th>
+													<th th:text="금액"></th>
+													<th></th>
+												</tr>
+											</thead>
+											<tbody>
+												<th:block th:switch="${path}" th:each="product:${clist}">
+												<tr th:case="'a'" >
+													<td class="shoping__cart__item"><img
+														th:src="|@{/images/product/}${product.product_img}|">
+														[[${product.product_name}]]
+														<h5></h5></td>
+													<td class="shoping__cart__price"
+														th:text="${product.product_price}"
+														th:id="|product_price_${product.product_name}|"></td>
+
+													<td class="shoping__cart__quantity"
+														th:text="${product.cart_cnt}"></td>									
+													<td class="hoping__cart__total" th:text="${product.total}"></td>
+												</tr>
+												<tr th:case="'b'" th:each="product:${clist}">
+													<td class="shoping__cart__item"><img
+														th:src="|@{/images/product/}${product.product_img}|">
+														[[${product.product_name}]]
+														<h5></h5></td>
+													<td class="shoping__cart__price"
+														th:text="${product.product_price}"
+														th:id="|product_price_${product.product_name}|"></td>
+													<td class="shoping__cart__quantity"
+														th:text="${cnt}"></td>
+													<td class="hoping__cart__total" th:text="${product.product_price * cnt}"></td>
+												</tr>
+									
+												</th:block>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="checkout__form">
+							<h4 th:text="주문하기"></h4>
+							<div>
+								<div class="checkout__input__checkbox">
+									<label for="diff-acc"> 다른 배송지로 주문하기 <input
+										type="checkbox" id="diff-acc"> <span class="checkmark"></span>
+									</label>
+									
+									<!-- 체크박스 이벤트(체크시 입력폼 초기화, 체크 해제시 기본 배송정보 불러오기) -->
+									<script>
+											$(document).ready(function(){
+												$("#diff-acc").change(function(){
+													if($("#diff-acc").is(":checked")){
+														$("#purchase_rec").val("");
+														$("#sample6_postcode").val("");
+														$("#sample6_address").val("");
+														$("#sample6_detailAddress").val("");
+														$("#purchase_tel").val("");
+														$("#purchase_email").val("");
+														$("#purchase_req").val("");
+														
+													} else {
+														$("#purchaseForm")[0].reset();
+													}
+												});
+											});
+											</script>
+								</div>
+							</div>
+							<br>
+							<form action="orderResult" method="post"
+								th:with="ulist=${ulist[0]}" th:id="purchaseForm">
+								
+								<div class="row">
+									<div class="col-lg-8 col-md-6">
+
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="checkout__input">
+													<p>
+														수령인 이름<span>*</span>
+													</p>
+													<input type="text" th:value="${ulist.user_name}"
+														th:name="purchase_rec" th:id="purchase_rec">
+													<input type="hidden" th:value="${ulist.user_no}" th:name="user_no">	
+												</div>
+											</div>
+											<div class="col-lg-6"></div>
+										</div>
+										<div class="checkout__input">
+											<p>
+												<span>*</span>
+											</p>
+
+										</div>
+										<span th:text="주소"></span><br>
+										<div class="col-lg-6">
+											<div class="checkout__input">
+												<input type="text" id="sample6_postcode" placeholder="우편번호"
+													th:value="${ulist.user_zipcode}" th:name="purchase_zipcode">
+
+												<input type="button" onclick="sample6_execDaumPostcode()"
+													value="우편번호 찾기"><br> <br> <input
+													type="text" id="sample6_address" placeholder="주소"
+													th:value="${ulist.user_addr}" th:name="purchase_addr1"><br>
+												<input type="text" id="sample6_detailAddress"
+													placeholder="상세주소" th:value="${ulist.user_addr2}"
+													th:name="purchase_addr2"> <input type="hidden"
+													id="sample6_extraAddress" placeholder="참고항목">
+											</div>
+										</div>
+
+										<script
+											src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+										<script>
+									function sample6_execDaumPostcode() {	// 카카오 우편번호 찾기 api 적용
+										new daum.Postcode(
+												{
+													oncomplete : function(data) {
+														// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+														// 각 주소의 노출 규칙에 따라 주소를 조합한다.
+														// 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+														var addr = ''; // 주소 변수
+														var extraAddr = ''; // 참고항목 변수
+
+														//사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+														if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+															addr = data.roadAddress;
+														} else { // 사용자가 지번 주소를 선택했을 경우(J)
+															addr = data.jibunAddress;
+														}
+
+														// 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+														if (data.userSelectedType === 'R') {
+															// 법정동명이 있을 경우 추가한다. (법정리는 제외)
+															// 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+															if (data.bname !== ''
+																	&& /[동|로|가]$/g
+																			.test(data.bname)) {
+																extraAddr += data.bname;
+															}
+															// 건물명이 있고, 공동주택일 경우 추가한다.
+															if (data.buildingName !== ''
+																	&& data.apartment === 'Y') {
+																extraAddr += (extraAddr !== '' ? ', '
+																		+ data.buildingName
+																		: data.buildingName);
+															}
+															// 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+															if (extraAddr !== '') {
+																extraAddr = ' ('
+																		+ extraAddr
+																		+ ')';
+															}
+															// 조합된 참고항목을 해당 필드에 넣는다.
+															document
+																	.getElementById("sample6_extraAddress").value = extraAddr;
+
+														} else {
+															document
+																	.getElementById("sample6_extraAddress").value = '';
+														}
+
+														// 우편번호와 주소 정보를 해당 필드에 넣는다.
+														document
+																.getElementById('sample6_postcode').value = data.zonecode;
+														document
+																.getElementById("sample6_address").value = addr;
+														// 커서를 상세주소 필드로 이동한다.
+														document
+																.getElementById(
+																		"sample6_detailAddress")
+																.focus();
+													}
+												}).open();
+									}
+								</script>
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="checkout__input">
+													<p th:text="전화번호">
+														<span>*</span>
+													</p>
+													<input type="text" th:name="purchase_tel"
+														th:id="purchase_tel" th:value="${ulist.user_tel}">
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="checkout__input">
+													<p th:text="이메일">
+														<span>*</span>
+													</p>
+													<input type="text" th:name="purchase_email"
+														th:id="purchase_email" th:value="${ulist.user_email}">
+												</div>
+											</div>
+										</div>
+										<div class="col-lg-">
+											<div class="checkout__input">
+												<p th:text="요청사항">
+													<span></span>
+												</p>
+												<input type="text" th:name="purchase_req">
+											</div>
+										</div>
+
+									</div>
+									<div class="col-lg-4 col-md-6">
+										<div class="checkout__order">
+											<th:block th:switch="${path}">
+											<h4 th:text="결제상세" ></h4>
+											<div class="checkout__order__products">
+												상품 <span th:text="금액"></span>
+											</div>
+											<ul th:each="product:${clist}">
+												<li>[[${product.product_name}]] <span th:case="'a'" 
+													th:text="${product.product_price * product.cart_cnt}"></span>
+													<span  th:case="'b'" 
+													th:text="${product.product_price * cnt}">
+													
+													</span></li>
+											</ul>
+											</th:block>
+											<th:block th:switch="${path}">
+											<div class="checkout__order__subtotal">
+												상품 금액 <span th:text="${sum}" th:id="product_total" th:case="'a'"><input type="hidden" th:name="sum" th:value="${sum}"></span>
+															<span th:each="product:${clist}">
+														  <span th:text="${product.product_price * cnt}" th:case="'b'" th:id="product_total"><input type="hidden" th:name="sum" th:value="${product.product_price * cnt}"></span>
+															</span>
+												<br> 캐쉬 <span
+													th:id="used_cash"></span><br> 포인트 <span
+													th:id="used_point"></span>
+											</div>
+											</th:block>
+											
+											<th:block th:switch="${path}">
+											<div class="checkout__order__total" th:case="'a'">
+												최종 결제 금액 <span th:text="${sum}" th:id="total_price"></span>
+												<input type="hidden" th:value="${sum}" th:name="purchase_total" th:id="purchase_total">
+											</div>
+											<div class="checkout__order__total" th:case="'b'" th:each="product:${clist}">
+												최종 결제 금액
+												
+												 <span th:text="${product.product_price * cnt}" th:id="total_price"></span>
+												<input type="hidden" th:value="${product.product_price * cnt}" th:name="purchase_total" th:id="purchase_total">
+												<input type="hidden" th:value="${cnt}" th:name="cnt">
+												<input type="hidden" th:value="${product.product_no}" th:name="product_no">
+											</div>
+											</th:block>
+								
+
+											<div class="checkout__input__checkbox">
+												<label for="payment"> Check Payment <input
+													type="checkbox" id="payment"> <span
+													class="checkmark"></span>
+												</label>
+											</div>
+											<div class="checkout__input__checkbox">
+												<label for="paypal"> Paypal <input type="checkbox"
+													id="paypal"> <span class="checkmark"></span>
+												</label>
+											</div>
+											<button type="submit" class="site-btn" th:id="btnSubmit">결제하기</button>
+
+											<!-- 결제창 입력 유효성 검사 -->
+											<script>
+							$(document).ready(function(){
+								$("#btnSubmit").click(function(event){
+									event.preventDefault();								
+								var checkRec = RegExp(/^[가-힣a-zA-Z]+$/);
+								var checkZipcode = RegExp(/^[0-9]+$/);
+								var checkTel = /^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$/; // 010-xxxx-xxxx
+								var checkMail = RegExp(/^[A-Za-z0-9_.-]+@[A-Za-z0-9-]+.[A-Za-z0-9-]+/);
+								
+								if($("#purchase_rec").val() === ""){
+									
+									alert("이름을 입력해주세요")
+									setTimeout( function(){ $("#purchase_rec").focus(); }, 1 );
+									
+								} else if (!checkRec.test($("#purchase_rec").val())){
+									
+									alert("이름은 한글, 영문만 입력 가능합니다");
+									$("#purchase_rec").val("");
+									setTimeout( function(){ $("#purchase_rec").focus(); }, 1 );
+									
+								} else if ($("#sample6_postcode").val() === ""){
+									
+									alert("우편번호를 입력해주세요");
+									setTimeout( function(){ $("#sample6_postcode").focus(); }, 1 );
+									
+								} else if (!checkZipcode.test($("#sample6_postcode").val())){
+									
+									alert("우편번호는 숫자로 입력해주세요");
+									$("#sample6_postcode").val("");
+									setTimeout( function(){ $("#sample6_postcode").focus(); }, 1 );
+									
+								} else if ($("#sample6_address").val() === ""){
+									
+									alert("주소를 입력해주세요")
+									setTimeout( function(){ $("#sample6_address").focus(); }, 1 );
+									
+								} else if ($("#sample6_detailAddress").val() === ""){
+									
+									alert("상세 주소를 입력해주세요");
+									setTimeout( function(){ $("#sample6_detailAddress").focus(); }, 1 );
+									
+								} else if ($("#purchase_tel").val() === ""){
+									
+									alert("전화번호를 입력해주세요");
+									setTimeout( function(){ $("#purchase_tel").focus(); }, 1 );
+									
+								} else if (!checkTel.test($("#purchase_tel").val())){
+									
+									alert("전화번호를 형식에 맞게 입력해주세요")
+									$("#purchase_tel").val("");
+									setTimeout( function(){ $("#purchase_tel").focus(); }, 1 );
+									
+								} else if ($("#purchase_email").val() === ""){
+									
+									alert("이메일을 입력해주세요")
+									setTimeout( function(){ $("#purchase_email").focus(); }, 1 );
+									
+								} else if (!checkMail.test($("#purchase_email").val())){
+									
+									alert("이메일을 정확히 입력해주세요")
+									$("#purchase_email").val("");
+									setTimeout( function(){ $("#purchase_email").focus(); }, 1 );
+									
+								} else if($("#user_cash").val() > [[${ulist.user_cash}]]){
+									
+									alert("입력 캐쉬가 보유중인 캐쉬를 초과했습니다")
+									$("#user_cash").val("");
+									$("#used_cash").text("");
+									$("#used_point").text("");
+									$("#total_price").text("[[${sum}]]")
+									setTimeout( function(){ $("#user_cash").focus(); }, 1 );
+									
+								} else if($("#user_point").val() > [[${ulist.user_point}]]){
+									
+									alert("입력 포인트가 보유중인 포인트를 초과했습니다")
+									$("#user_point").val("");
+									$("#used_cash").text("");
+									$("#used_point").text("");
+									$("#total_price").text("[[${sum}]]")
+									setTimeout( function(){ $("#user_point").focus(); }, 1 );
+									
+								} else if(confirm("결제하시겠습니까?")){
+									$("#purchaseForm").submit();
+								}
+								});
+							});
+							</script>
+										</div>
+									</div>
+								</div>
+								<div class="container">
+
+									<div class="checkout__form">
+										<h4>포인트, 캐쉬 사용</h4>
+									</div>
+									<div class="col-lg-6">
+										<div>
+											<p th:text="|보유중인 캐쉬 : ${ulist.user_cash}|">
+												<span>*</span>
+											</p>
+											<input type="text" th:name="user_cash_used" th:id="user_cash"
+												th:value="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"> <input type="button" value="전액 사용"
+												th:id="use_all_cash_btn">
+										</div>
+
+										<div>
+											<p th:text="|보유중인 포인트 : ${ulist.user_point}|">
+												<span>*</span>
+											</p>
+											<input type="text" th:name="user_point_used" th:id="user_point"
+												th:value="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"> <input type="button" value="전액 사용"
+												th:id="use_all_point_btn">
+												<input type="hidden" th:name="user_cash" th:value="${ulist.user_cash}">
+												<input type="hidden" th:name="user_point" th:value="${ulist.user_point}">
+										</div>
+									</div>
+									
+									<!-- 캐쉬, 포인트 사용에 따른 결제 금액 변경 함수 -->
+									<script>
+$(document).ready(function() {
+    $("#use_all_cash_btn").click(function() {
+        var cash = [[${ulist.user_cash}]];
+        $("#used_cash").text(cash);
+        $("#user_cash").val(cash);
+        var sum1 = $("#product_total").text() - $("#used_cash").text() - $("#used_point").text();
+        if(sum1 < 0) {
+            alert("포인트와 캐쉬 사용 금액의 합은 총 상품 금액을 초과할 수 없습니다.");
+            sum1 = $("#product_total").text();
+            $("#used_cash").text(0);
+            $("#user_cash").val(0);
+        }
+        $("#total_price").text(sum1);
+        $("#purchase_total").val(parseInt(sum1));
+    });
+    
+    $("#use_all_point_btn").click(function() {
+        var point = [[${ulist.user_point}]];
+        $("#used_point").text(point);
+        $("#user_point").val(point);
+        var sum1 = $("#product_total").text() - $("#used_cash").text() - $("#used_point").text();
+        if(sum1 < 0) {
+            alert("포인트와 캐쉬 사용 금액의 합은 총 상품 금액을 초과할 수 없습니다.");
+            sum1 = $("#product_total").text();
+            $("#used_point").text(0);
+            $("#user_point").val(0);
+        }
+        $("#total_price").text(sum1);
+        $("#purchase_total").val(parseInt(sum1));
+    });
+    
+    $("#user_cash").change(function(){
+        $("#used_cash").text($(this).val());
+        var sum1 = $("#product_total").text() - $("#used_cash").text() - $("#used_point").text();
+        if(sum1 < 0) {
+            alert("포인트와 캐쉬 사용 금액의 합은 총 상품 금액을 초과할 수 없습니다.");
+            sum1 = $("#product_total").text();
+            $("#used_cash").text(0);
+            $("#user_cash").val(0);
+        }
+        $("#total_price").text(sum1);
+        $("#purchase_total").val(parseInt(sum1));
+    });
+    
+    $("#user_point").change(function(){
+        $("#used_point").text($(this).val());
+        var sum1 = $("#product_total").text() - $("#used_cash").text() - $("#used_point").text();
+        if(sum1 < 0) {
+            alert("포인트와 캐쉬 사용 금액의 합은 총 상품 금액을 초과할 수 없습니다.");
+            sum1 = $("#product_total").text();
+            $("#used_point").text(0);
+            $("#user_point").val(0);
+        }
+        $("#total_price").text(sum1);
+        $("#purchase_total").val(parseInt(sum1));
+    });
+});
+</script>
+								</div>
+							</form>
+						</div>
+					</div>
+				</section>
+				<!-- Checkout Section End -->
+
+			</div>
+		</div>
+	</section>
+
+	<!-- Blog Section End -->
+
+</div>
+
+</html>

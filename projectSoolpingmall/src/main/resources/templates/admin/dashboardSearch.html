@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragmentsAdmin/layout}"> <!-- default layout 사용 -->
+      
+
+<!-- 페이지의 개별적인 css, js 설정 영역 -->
+<!-- thymeleaf layout dialect가 content페이지의 head태그를 layout의 head태그에 자동으로 추가해준다. -->
+    <title>술핑몰</title>
+
+<!-- 페이지의 실제 content 내용 -->
+
+<div layout:fragment="contentFragment">
+
+   	<main id="main" class="main">
+
+		<div class="pagetitle">
+			<h1>Dashboard</h1>
+			<nav>
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a th:href="@{'dashboard'}">Home</a></li>
+					<li class="breadcrumb-item active">Dashboard</li>
+				</ol>
+			</nav>
+		</div>
+		<!-- End Page Title -->
+
+		<section class="section dashboard">
+			<div class="row">
+
+				<!-- Left side columns -->
+				<div class="col-lg-8">
+					<div class="row">
+
+						<!-- Sales Card -->
+						<div class="col-xxl-4 col-md-6">
+							<div class="card info-card sales-card">
+								<div class="card-body">
+									<h5 class="card-title">	
+									Sales
+									<span>총 판매량</span>
+									</h5>
+									<div class="d-flex align-items-center">
+										<div
+											class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+											<i class="bi bi-cart"></i>
+										</div>
+										<div class="ps-3">
+											<h6 th:text="|${sales}개|"></h6>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- End Sales Card -->
+
+						<!-- Revenue Card -->
+						<div class="col-xxl-4 col-md-6">
+							<div class="card info-card revenue-card">
+								<!--  DB에서 총 수익 가져오기 -->
+								<div class="card-body">
+									<h5 class="card-title">
+										Revenue <span>총 수익</span>
+									</h5>
+									<div class="d-flex align-items-center">
+										<div
+											class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+											<i class="bi bi-currency-dollar"></i>
+										</div>
+										<div class="ps-3">
+											<h6 th:text="|${revenue}원|"></h6>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+						<!-- End Revenue Card -->
+
+						<!-- Customers Card -->
+						<div class="col-xxl-4 col-xl-12">
+
+							<div class="card info-card customers-card">
+								<div class="card-body">
+									<h5 class="card-title">Customers <span>유저수</span></h5>
+
+									<div class="d-flex align-items-center">
+										<div
+											class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+											<i class="bi bi-people"></i>
+										</div>
+										<div class="ps-3">
+											<h6 th:text="|${usercnt}명|"></h6>
+											<!--  유저 수 가져오기 -->
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+						<!-- End Customers Card -->
+						<!-- Reports -->
+
+						<div class="col-12">
+							<div class="card">
+								<div class="card-body">
+									<h5 class="card-title">기간별 수익</h5>
+									<div th:text="${country}"></div>
+									<div th:text="${type}"></div>
+									<div></div>
+									<!-- Line Chart -->
+									<div id="reportsChart"></div>
+
+									<form class="row g-3" name="frmShowChartData"
+										action="dashboardsearch" method="get">
+										<div class="col-md-4">
+											<select name="product_cntr" id="country" class="form-select">
+												<option value="">나라를 선택하세요</option>
+												<th:block th:each="country : ${cntrs}">
+													<option th:value="${country}" th:text="${country}"></option>
+												</th:block>
+											</select>
+										</div>
+										<div class="col-md-4">
+											<select name="product_type" id="type" class="form-select">
+												<option value="">종류를 선택하세요</option>
+												<th:block th:each="t : ${types}">
+													<option th:value="${t}" th:text="${t}"></option>
+												</th:block>
+											</select>
+										</div>
+										<div class="text-center">
+											<input type="submit" class="btn btn-primary" th:value="조회하기" />
+										</div>
+									</form>
+				<script th:inline="javascript">
+                  /*<![CDATA[*/
+  					let purchaseArray = [];
+					
+                  	[[# th:each="purchase : ${purchaseData}"]]
+                    purchaseArray.push({
+                      total: [[${purchase.purchase_total}]],
+                      date: [[${purchase.purchase_regdate}]]
+                    });
+                  [[/]]
+                  
+                	 let purchaseSearchArray = [];
+  					
+                    	[[# th:each="purchaseSearch : ${purchaseDataSearch}"]]
+                    	purchaseSearchArray.push({
+                        total: [[${purchaseSearch.purchase_total}]],
+                        date: [[${purchaseSearch.purchase_regdate}]]
+                      });
+                    [[/]]
+                    document.addEventListener("DOMContentLoaded", () => {
+                    	// 컨트롤러에서 받은 purchase_redgate 값을 1차원 배열로 저장하여 보이기
+                      new ApexCharts(document.querySelector("#reportsChart"), {
+                        series: [{
+                          name: '매출 총액',
+                          data: purchaseArray.map(purchase => purchase.total),
+                        },{
+                            name: '종류별 매출',
+                            data: purchaseSearchArray.map(purchaseSearch => purchaseSearch.total),
+                          }],
+                        chart: {
+                          height: 350,
+                          type: 'area',
+                          toolbar: {
+                            show: false
+                          },
+                        },
+                        colors: ['#4154f1','#451356'],
+                        xaxis: {
+                          type: 'date',
+                          categories: purchaseArray.map(purchase => purchase.date),
+                        },
+                      }).render();
+                    }); 
+                    /*]]>*/
+                  </script>
+									<!-- End Line Chart -->
+								</div>
+							</div>
+						</div>
+						<!-- End Reports -->
+					</div>
+				</div>
+				<!-- End Left side columns -->
+				<!-- Right side columns -->
+			
+				<div class="col-lg-4">
+					<!-- Recent Activity -->
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">
+								매출 <span></span>
+							</h5>
+								<div class="filter">
+									<a class="icon" href="#" data-bs-toggle="dropdown"><i
+										class="bi bi-three-dots"></i></a>
+									<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+										<li class="dropdown-header text-start">
+											<h6>Filter</h6>
+										</li>
+										<li id="today"><a class="dropdown-item">Today</a></li>
+										<li id="month"><a class="dropdown-item">Month</a></li>
+										<li id="year"><a  class="dropdown-item">Year</a></li>
+									</ul>
+								</div>
+						<div>
+						<table class="table" id="salesTable">	
+						<tr><td>일자</td><td>매출</td></tr>
+						<tr th:each="sale : ${purchaseData}">
+							<td>[[${sale.purchase_regdate}]]</td>
+							<td>[[${sale.purchase_total}]]</td>
+						</tr>
+						</table>
+						</div>
+						</div>
+					</div>
+					<!-- End Recent Activity -->
+
+				  <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Recent Activity</h5>
+              <div class="activity">
+                <div class="activity-item d-flex">
+                  <div class="activite-label">32 min</div>
+                  <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
+                  <div class="activity-content">
+                    프랑스 산 와인 대량 입고
+                  </div>
+                </div><!-- End activity item-->
+                <div class="activity-item d-flex">
+                  <div class="activite-label">56 min</div>
+                  <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
+                  <div class="activity-content">
+                    소주 새로 신제품 출시
+                  </div>
+                </div><!-- End activity item-->
+
+                <div class="activity-item d-flex">
+                  <div class="activite-label">2 hrs</div>
+                  <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
+                  <div class="activity-content">
+                    김영민 회원 가입!
+                  </div>
+                </div><!-- End activity item-->
+
+                <div class="activity-item d-flex">
+                  <div class="activite-label">1 day</div>
+                  <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
+                  <div class="activity-content">
+                    술핑몰 사이트 광고 진행
+                  </div>
+                </div><!-- End activity item-->
+
+                <div class="activity-item d-flex">
+                  <div class="activite-label">2 days</div>
+                  <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
+                  <div class="activity-content">
+                    사이트 전체 페이지 개편
+                  </div>
+                </div><!-- End activity item-->
+
+                <div class="activity-item d-flex">
+                  <div class="activite-label">4 weeks</div>
+                  <i class='bi bi-circle-fill activity-badge text-muted align-self-start'></i>
+                  <div class="activity-content">
+                    술핑몰 사이트 신규 런칭
+                  </div>
+                </div><!-- End activity item-->
+
+              </div>
+            </div>
+          </div><!-- End Recent Activity -->
+		</div>
+				<!-- End Right side columns -->
+
+		</div>
+	 </section>
+
+	</main>
+	<!-- End #main -->
+</div>
+</html>

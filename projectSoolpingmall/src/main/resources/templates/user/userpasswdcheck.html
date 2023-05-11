@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"> <!-- default layout 사용 -->
+      
+
+<!-- 페이지의 개별적인 css, js 설정 영역 -->
+<!-- thymeleaf layout dialect가 content페이지의 head태그를 layout의 head태그에 자동으로 추가해준다. -->
+    <title>술핑몰</title>
+<style>
+
+</style>
+	
+<!-- 페이지의 실제 content 내용 -->
+
+<div layout:fragment="contentFragment">
+
+	<script type="text/javascript">
+$(document).ready(function() {
+	$("#submit").click(function(){
+		$.ajax({
+			type: "GET",
+			url: "passwdCheckProcess?passwd="+$("#passwd").val(),
+			contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+			error: function(data) {
+			  console.log('통신실패!!'+data);
+			},
+			success: function(data) {
+				if(data === "Y"){
+					location.href = "userInfoModify";
+				}else if(data === "N"){
+					alert("id또는 비밀번호가 동일하지 않습니다.")
+				}
+			}
+		});
+	});
+});
+</script>
+
+
+	
+	
+    <!-- Hero Section Begin -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+		
+		
+				<div th:insert="~{user/usersidebar::sidebar}"></div>
+		
+ 
+                            <div class="checkout__input" style="margin-top: 15%;padding-left: 0px;margin-left: 20%;margin-right: 20%;">
+                                <p>비밀번호 확인<span>*</span></p>
+                                <div class="input-group-append">
+									<input type="password" class="form-control" id="passwd" name="passwd">
+							        <button id="submit" style="width: 116px;">확인</button>
+							    </div>
+                            </div>
+     
+
+
+        </div>
+        </div>
+    </section>
+    <!-- Blog Section End -->
+
+</div>
+</html>

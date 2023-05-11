@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="sidebarFragment">
+	<!-- 퀵메뉴 -->
+
+				<div class="quick-menu">
+					<button class="scroll-btn" id="scroll-top">
+						<i class="fas fa-arrow-up"></i>
+					</button>
+					<div class="recent-products">
+						<h4>상품 준비 중</h4>
+						<ul class="product-list">
+							<!-- 쿠키 생성 후 값을 저장해서 출력 -->
+							<li><a href="#"><img src="images/product/Mizubasho.png"
+									alt="Product 1"></a> <a href="#">Product 1</a></li>
+							<li><a href="#"><img src="images/product/Okunomatsu.png"
+									alt="Product 2"></a> <a href="#">Product 2</a></li>
+							<li><a href="#"><img src="images/product/Akagisan.png"
+									alt="Product 3"></a> <a href="#">Product 3</a></li>
+
+						</ul>
+					</div>
+					<button class="scroll-btn" id="scroll-bottom">
+						<i class="fas fa-arrow-down"></i>
+					</button>
+				</div>
+				<!-- 스크롤 버튼 이벤트 -->
+				<script>
+					const scrollTopBtn = document.querySelector("#scroll-top");
+					const scrollBottomBtn = document.querySelector("#scroll-bottom");
+
+					scrollTopBtn.addEventListener("click", () => {
+  						window.scrollTo({
+   						 top: 0,
+ 						   behavior: "smooth"
+ 						});
+					});
+
+					scrollBottomBtn.addEventListener("click", () => {
+  						window.scrollTo({
+  						  top: document.body.scrollHeight,
+   							 behavior: "smooth"
+ 						 });
+					});
+				</script>
+
+				<!-- 퀵메뉴 끝 -->
+</th:block>
+</html>

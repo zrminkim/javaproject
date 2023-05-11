@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"> <!-- default layout 사용 -->
+      
+<head>
+<style>
+.box{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+form{
+ width:700px;
+}
+.btn-success{
+margin-top:50px;
+width:120px;
+}
+.btn-submit{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+</style>
+<!-- 페이지의 개별적인 css, js 설정 영역 -->
+<!-- thymeleaf layout dialect가 content페이지의 head태그를 layout의 head태그에 자동으로 추가해준다. -->
+    <title>술핑몰</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.0.1/dist/lux/bootstrap.min.css" rel="stylesheet"
+          crossorigin="anonymous">
+</head>
+<!-- 페이지의 실제 content 내용 -->
+
+<div layout:fragment="contentFragment">
+
+    <!-- Hero Section Begin -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+            
+            <div class="box">
+	            <form action="boardinsert" method="post" id="frm">
+		            <h2>상품 문의 입력</h2>
+		            
+		            
+		 			<div class="form-group">
+					  <label class="col-form-label mt-4" for="user_passwd">비밀번호</label>
+					  <input type="text" class="form-control"  name="userpasswd" id="userpasswd">
+					</div>
+		           
+		            <div class="form-group">
+					  <label class="col-form-label mt-4" for="inputDefault">제목</label>
+					  <input type="text" class="form-control"  name="qna_subject" id="inputDefault">
+					</div>
+		            
+		            <div class="form-group">
+				      <label for="exampleTextarea" class="form-label mt-4">내용</label>
+				      <textarea class="form-control"  name="qna_content" id="exampleTextarea" rows="3"></textarea>
+				    </div>
+		            
+		            <fieldset class="form-group">
+				      <legend class="mt-4">비밀글</legend>
+				      <div class="form-check form-switch">
+				        <input class="form-check-input"  name="qna_secret" value="U" type="checkbox" id="flexSwitchCheckChecked" checked>
+				        <label class="form-check-label" for="flexSwitchCheckChecked">해당 게시물을 모두에게 공개합니다</label>
+				      </div>
+				      <div class="btn-submit">
+						<input type="button" class="btn btn-success" id="btnAsk" value="작성">
+			      	  </div>
+				    </fieldset>
+	            </form>
+			</div>
+
+
+<script type="text/javascript">
+$("#btnAsk").on("click",function(){
+	$("#frm").submit();
+	
+});
+</script>
+            
+            </div>
+        </div>
+	</section>
+</div>

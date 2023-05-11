@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/layout}">
+<!-- default layout 사용 -->
+
+
+<!-- 페이지의 개별적인 css, js 설정 영역 -->
+<!-- thymeleaf layout dialect가 content페이지의 head태그를 layout의 head태그에 자동으로 추가해준다. -->
+<title>술핑몰</title>
+
+
+
+<!-- 페이지의 실제 content 내용 -->
+
+<div layout:fragment="contentFragment">
+	<script>
+		$(document).ready(function() {
+			$("button[name='delwish']").click(function() {
+				alert("dd");
+			});
+		});
+	</script>
+	<!-- Hero Section Begin -->
+	<section class="hero">
+		<div class="container">
+			<div class="row">
+
+				<div th:insert="~{user/usersidebar::sidebar}"></div>
+
+
+				<div class="container" style="width: 830px;">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="shoping__cart__table">
+								<form action="">
+									<table>
+										<thead>
+											<tr>
+												<th class="shoping__product" th:text="상품명"></th>
+												<th>상품</th>
+												<th>리뷰</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody>
+												<th:block th:if="${#lists.isEmpty(reply)}">
+													<tr>
+														<td>덧글내역이 없습니다.</td>
+													</tr>
+													</th:block>
+													<th:block th:unless="${#lists.isEmpty(reply)}">
+													<th:block th:if="${#lists.isEmpty(reply)}">
+														<tr th:each="reply:${reply}">
+															<td ></td>
+														</tr>
+													</th:block>
+
+													</th:block>
+										</tbody>
+									</table>
+								</form>
+							</div>
+						</div>
+
+
+
+					</div>
+				</div>
+			</div>
+			<th:block th:unless="${#lists.isEmpty(userreply)}">
+				<nav aria-label="Page navigation example">
+					<ul class="pagination justify-content-center">
+						<li class="page-item"><span th:if="${pageVo.startPage > 1}">
+								<a class="page-link" th:href="@{'userPurchaseList?page=1'}"
+								th:text="'처음&emsp;'"
+								th:style="${'text-decoration: none; color:black;'}"></a>
+						</span></li>
+						<li class="page-item"><span th:if="${pageVo.isPrev == true}">
+								<a class="page-link"
+								th:href="@{'userPurchaseList?page='+${pageVo.startPage - 1}}"
+								th:text="'이전'"
+								th:style="${'text-decoration: none; color:black;'}"></a>
+						</span></li>
+						<th:block
+							th:with="start = ${pageVo.startPage}, end = ${pageVo.endPage}">
+							<li
+								th:classappend="${pageNum == page ? 'page-item active' : 'page-item'}"
+								th:with="start = ${pageVo.startPage}, end = ${pageVo.endPage}"
+								th:each="pageNum : ${#numbers.sequence(start, end)}"><a
+								class="page-link"
+								th:href="@{userPurchaseList?(page=${pageNum})}"
+								th:text="|&emsp;${pageNum}&emsp;|"
+								th:style="${'text-decoration: none; color:black;'}"></a></li>
+						</th:block>
+						<li class="page-item"><span th:if="${pageVo.isNext == true}">
+								<a class="page-link"
+								th:href="@{'userPurchaseList?page='+|${pageVo.endPage + 1}|}"
+								th:text="'다음'"
+								th:style="${'text-decoration: none; color:black;'}"></a>
+						</span></li>
+						<li class="page-item"><span
+							th:if="${pageVo.endPage < pageVo.totalPageCount}"> <a
+								class="page-link"
+								th:href="@{'userPurchaseList?page='+${pageVo.totalPageCount}}"
+								th:text="|&emsp;끝|"
+								th:style="${'text-decoration: none; color:black;'}"></a>
+						</span></li>
+					</ul>
+				</nav>
+			</th:block>
+
+
+		</div>
+	</section>
+	<!-- Blog Section End -->
+
+</div>
+</html>

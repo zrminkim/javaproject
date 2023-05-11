@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragmentsAdmin/layout}"> <!-- default layout 사용 -->
+
+<!-- 페이지의 개별적인 css, js 설정 영역 -->
+<!-- thymeleaf layout dialect가 content페이지의 head태그를 layout의 head태그에 자동으로 추가해준다. -->
+    <title>술핑몰</title>
+
+<!-- 페이지의 실제 content 내용 -->
+
+<div layout:fragment="contentFragment">
+<main id="main" class="main">
+   <table>
+		<tr>
+			<th>타임딜번호</th>
+			<th>제품번호</th>
+			<th>할인율</th>
+			<th>시작일시</th>
+			<th>종료일시</th>
+			<th>타임딜 상태</th>
+			<th>타임딜생성일</th>
+			<th>타임딜수정일</th>
+
+			<th>수정</th>
+		</tr>
+		<tr th:each="timedeal, status: ${timedeals}">
+			<td><div th:text="${timedeal.timedeal_no}"></div><input type="hidden" name="timedeal_no" th:value="${timedeal.timedeal_no}"></td>
+			<td>[[${timedeal.product_no}]]</td>
+			<td>[[${timedeal.timedeal_discnt}]]</td>
+			<td>[[${timedeal.timedeal_begin}]]</td>
+			<td>[[${timedeal.timedeal_end}]]</td>
+			<td>[[${timedeal.timedeal_state}]]</td>
+			<td>[[${timedeal.timedeal_regdate}]]</td>
+			<td>[[${timedeal.timedeal_moddate}]]</td>
+			<td>
+			<button type="button" name="btnEdit" th:value="${timedeal.product_no}">수정</button> 
+			<button type="button" name="btnChange" th:value="${timedeal.product_no}">변경</button>
+			</td>
+		</tr>
+	</table>
+<nav aria-label="Page navigation example" >
+  <ul class="pagination justify-content-center">
+    <li class="page-item"><span th:if="${pageVo.startPage > 1}">
+        	<a class="page-link" th:href="@{'timedealmanager?page=1'}" th:text="'처음&emsp;'" th:style="${'text-decoration: none; color:black;'}" ></a>
+    	</span>
+    </li>
+    <li class="page-item">
+    	<span th:if="${pageVo.isPrev == true}">
+    		<a class="page-link" th:href="@{'timedealmanager?page='+${pageVo.startPage - 1}}" th:text="'이전'" th:style="${'text-decoration: none; color:black;'}"></a>
+    	</span>
+    </li>
+   <th:block  th:with="start = ${pageVo.startPage}, end = ${pageVo.endPage}">
+	    <li th:classappend="${pageNum == page ? 'page-item active' : 'page-item'}" th:with="start = ${pageVo.startPage}, end = ${pageVo.endPage}" th:each="pageNum : ${#numbers.sequence(start, end)}">
+	    		<a class="page-link" th:href="@{timedealmanager?(page=${pageNum})}" th:text="|&emsp;${pageNum}&emsp;|" th:style="${'text-decoration: none; color:black;'}"></a>
+	    </li>
+    </th:block>
+    <li class="page-item"> 
+    	<span th:if="${pageVo.isNext == true}">
+			<a class="page-link" th:href="@{'timedealmanager?page='+|${pageVo.endPage + 1}|}" th:text="'다음'" th:style="${'text-decoration: none; color:black;'}"></a>
+    	</span>
+    </li>
+    <li class="page-item">
+    	<span th:if="${pageVo.endPage < pageVo.totalPageCount}">
+			<a class="page-link" th:href="@{'timedealmanager?page='+${pageVo.totalPageCount}}" th:text="|&emsp;끝|" th:style="${'text-decoration: none; color:black;'}"></a>
+    	</span>
+    </li>
+  </ul>
+</nav>
+
+</main>
+
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">x</span>
+    <p>타임딜 상태를 변경할까요?</p>
+    <button class="confirmUpdate">확인</button>
+  </div>
+</div>
+
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+	let btnPno = "";
+	let uplink = '/updateTimedeal?product_no=';
+	let uplinkAuctionState = '/updateTimeDealStateProgress?product_no=';
+	// 수정버튼
+	$("button[name=btnEdit]").on("click",function(){
+		location.href = uplink + $(this).val();		
+	});
+	
+	$("button[name=btnChange]").on("click",function(){
+		btnPno = $(this).val();
+		  $(".modal").fadeIn();	
+	});
+	  $(".confirmUpdate").click(function(){
+			location.href = uplinkAuctionState + btnPno;
+		});
+		$(".close").click(function(){
+			$(".modal").fadeOut();
+		});
+/*]]>*/
+</script>
+</div>
+</html>

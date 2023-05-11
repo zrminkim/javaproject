@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"> <!-- default layout 사용 -->
+      
+
+<!-- 페이지의 개별적인 css, js 설정 영역 -->
+<!-- thymeleaf layout dialect가 content페이지의 head태그를 layout의 head태그에 자동으로 추가해준다. -->
+    <title>술핑몰</title>
+
+<!-- 페이지의 실제 content 내용 -->
+
+<div layout:fragment="contentFragment">
+
+    <!-- Hero Section Begin -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+
+		<th:block th:if="${not #lists.isEmpty(lists)}">               
+		<div th:each="list: ${lists}">
+                <div class="col-lg-3 col-md-4 col-sm-6 mix fresh-meat vegetables">
+                    <div class="featured__item">
+                        <div class="featured__item__pic set-bg" >
+                        <a th:href="@{/auctionInfo(auction_no=${list.auction_no})}">
+                        	<img th:src="@{/images/product/}+${list.product_img}"  />
+                        </a>
+                            <ul class="featured__item__pic__hover">
+                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="featured__item__text">
+                            <h6><a href="#"></a></h6>
+                            <h5 th:text="${list.product_name}"></h5>
+                            <h5 th:text="'시작시간  '+ ${#dates.format(list.auction_open, 'yyyy.MM.dd HH:mm:ss')}"></h5>
+                            <h5 th:text="'종료시간  '+ ${#dates.format({list.auction_close}, 'yyyy.MM.dd HH:mm:ss')}"></h5>
+                            <p>남은시간 : <span th:id="'countdown'+${list.auction_no}"></span></p>
+							<script th:inline="javascript">
+								function updateCountdown(list, secondsRemaining) {
+								    var countdownElement = document.getElementById("countdown"+list.auction_no);
+								    // Calculate remaining time in hours, minutes, and seconds
+								    var hours = Math.floor(secondsRemaining / 3600);
+								    var minutes = Math.floor((secondsRemaining % 3600) / 60);
+								    var seconds = secondsRemaining % 60;
+
+								    // Display remaining time
+								    countdownElement.innerHTML = hours + "h " + minutes + "m " + seconds + "s";
+								    secondsRemaining--;
+								    setTimeout(function(){ updateCountdown(list, secondsRemaining); }, 1000);
+								}
+							updateCountdown([[${list}]], [[${list.TimeRemaining}]]);   
+							</script>
+                            <th:block th:if="${not #strings.isEmpty(list.auctionp_price)}"> 
+                            	<h5 th:text="'최고 입찰가격 :' + ${list.auctionp_price}"></h5>
+                            </th:block>
+                            <th:block th:if="${#strings.isEmpty(list.auctionp_price)}">
+                            	<h5>현재 입찰 없음</h5>
+                           	</th:block>
+							
+                        </div>
+                    </div>
+                </div>
+		</div>
+		</th:block>
+
+
+
+
+
+            </div>
+        </div>
+    </section>
+    <!-- Blog Section End -->
+
+</div>
+</html>

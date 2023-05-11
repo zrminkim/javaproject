@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<body>
+
+<div th:fragment="sidebar">
+<div class="border-end bg-white" id="sidebar-wrapp" style="padding-right: 80px;">
+	<div class="list-group list-group-flush" >
+		<!--/**/-->
+		 <p>[[${user.user_name}]]님</p>
+		<p th:text="|가입일 : ${user.user_regdate}|"></p>
+		<p>캐시 : [[${user.user_cash}]]</p>
+		<p>포인트 : [[${user.user_point}]]</p> 
+		<p> 
+			<a href="userPasswdCheck">회원정보 수정</a>
+		</p>
+	</div>
+	<div class="list-group list-group-flush">
+		<a class="list-group-item list-group-item-action list-group-item-light p-3"	href="userPurchaseList">주문/배송내역</a> 
+		<a class="list-group-item list-group-item-action list-group-item-light p-3"	href="userWishList">관심상품</a>
+		<a class="list-group-item list-group-item-action list-group-item-light p-3" href="userRelpyList">구매덧글</a>
+		<a class="list-group-item list-group-item-action list-group-item-light p-3" href="userCashChagre">캐시충전</a>
+	</div>
+	</div>
+</div>
+</body>

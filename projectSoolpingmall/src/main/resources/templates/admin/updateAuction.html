@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="html-head">
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>술핑몰 관리자</title>
+
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+	rel="stylesheet" />
+<!-- Core theme CSS (includes Bootstrap)-->
+<link href="/css/styles.css" rel="stylesheet" />
+<link href="/css/admin/admin.css" rel="stylesheet" />
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+</head>
+<body>
+	<div class="container">
+	
+	</div>
+<script type="text/javascript">
+window.onload = function() {
+	  let auction_open = document.getElementById('auction_open');
+	  let startDateDiv = document.getElementById("startDateDiv");
+	  
+	  let auction_close = document.getElementById('auction_close');
+	  let endDateDiv = document.getElementById("endDateDiv");
+	  
+	  let auction_sprice = document.getElementById('auction_sprice');
+	  let startpriceDiv = document.getElementById("startpriceDiv");
+	  let msgDiv = document.getElementById("msgDiv");
+	  
+	  let start = new Date(auction_open.value);
+	  let end = new Date(auction_close.value);
+	  
+	  let timeDifference = end.getTime() - start.getTime();
+	  let check = /^[0-9]+$/; 
+	  	
+	  const opendate = new Date(auction_open.value).toISOString().split('T')[0];
+	  const otime = new Date(auction_open.value).toTimeString().split(' ')[0];
+	  document.getElementById("startDateDiv").value = opendate+ " "+ otime;
+	  console.log(document.getElementById("startDateDiv").textContent);
+	  $("#open").val(opendate+ " " + otime);
+	  console.log($("#auction_open").val());
+	  
+	  const closedate = new Date(auction_close.value).toISOString().split('T')[0];
+	  const ctime = new Date(auction_close.value).toTimeString().split(' ')[0];
+	  document.getElementById("endDateDiv").value = closedate+ " " + ctime;
+	  $("#close").val(closedate+ " " + ctime);
+	  console.log(document.getElementById("endDateDiv").textContent);
+	  
+	  auction_open.onblur = function() {
+	    if (auction_open.value === "") {
+	    	startDateDiv.innerText = "시작날짜를 입력하세요";
+	    	auction_open.focus();
+	    	auction_open.setAttribute('required', '');
+	    } else {
+	    	auction_open.removeAttribute('required', '');
+	    }
+	    if (timeDifference < 0) {
+	    	$("#dayModal").fadeIn();
+	      }
+	    $(".closeday").click(function(){
+			$("#dayModal").fadeOut();
+		});
+	    $(".check").click(function(){
+			$("#dayModal").fadeOut();
+		});
+	  }
+	  startDateInput();
+	///////////////////////////////////
+	  
+	  auction_close.onblur = function() {
+		  let start = new Date(auction_open.value);
+		  let end = new Date(auction_close.value);
+		  let timeDifference = end.getTime() - start.getTime();
+	    if (auction_close.value === "") {
+	    	endDateDiv.innerText = "종료날짜를 입력하세요";
+	    	auction_close.focus();
+	    	auction_close.setAttribute('required', '');
+	    }else {
+	    	auction_close.removeAttribute('required', '');
+	    }
+	    if (timeDifference < 0) {
+	    	$("#dayModal").fadeIn();
+	      }
+	    $(".closeday").click(function(){
+			$("#dayModal").fadeOut();
+		});
+	    $(".check").click(function(){
+			$("#dayModal").fadeOut();
+		});
+	      
+	  }
+	  endDateInput();
+
+	  auction_sprice.onblur = function() {
+		    if (auction_sprice.value === "") {
+		    	startpriceDiv.innerText = "경매 시작가를 입력하세요";
+		    	auction_sprice.focus();
+		    	auction_sprice.setAttribute('required', '');
+		    }else if(!check.test(auction_sprice.value)) {
+		    	startpriceDiv.innerText = "상품가격은 숫자형식으로 입력하세요";
+		    	auction_sprice.focus();
+		    	auction_sprice.setAttribute('required', '');
+		    }
+		    else {
+		    	auction_sprice.removeAttribute('required', '');
+		    } 
+		  }
+	  startpriceInput();
+	  
+	  // 경매 시작일 포맷 변경
+	  auction_open.addEventListener("change", () => {
+		  const opendate = new Date(auction_open.value).toISOString().split('T')[0];
+		  const time = new Date(auction_open.value).toTimeString().split(' ')[0];
+		  document.getElementById("startDateDiv").value = opendate+ " "+ time;
+		  console.log(document.getElementById("startDateDiv").textContent);
+		  $("#open").val(opendate+ " " + time);
+		  console.log($("#auction_open").val());
+		});
+	  
+	  // 경매 종료일 포맷 변경
+	  auction_close.addEventListener("change", () => {
+		  const closedate = new Date(auction_close.value).toISOString().split('T')[0];
+		  const time = new Date(auction_close.value).toTimeString().split(' ')[0];
+		  document.getElementById("endDateDiv").value = closedate+ " " + time;
+		  $("#close").val(closedate+ " " + time);
+		  console.log(document.getElementById("endDateDiv").textContent);
+		});
+	  
+	  document.getElementById('btnSubmit').onclick = function(){
+		  if(auction_open.value === "" || auction_close.value === "" 
+			  || auction_sprice.value === "" && !check.test(auction_sprice)){
+			  if (auction_open.value === "") {
+				  startDateDiv.innerText = "시작날짜를 입력하세요";
+				  auction_open.focus();
+				  auction_open.setAttribute('required', '');
+			    } else {
+			    	auction_open.removeAttribute('required', '');
+			    }
+			  startDateInput();
+			  
+			  if (auction_close.value === "") {
+				  endDateDiv.innerText = "종료날짜를 입력하세요";
+				  auction_close.focus();
+				  auction_close.setAttribute('required', '');
+			    } else {
+			    	auction_close.removeAttribute('required', '');
+			    }
+			  endDateInput();
+			  
+			  if (auction_sprice.value === "") {
+				  startpriceDiv.innerText = "경매시작가격을 업로드하세요";
+				  auction_sprice.focus();
+				  auction_sprice.setAttribute('required', '');
+			    } else {
+			    	auction_sprice.removeAttribute('required', '');
+			    }
+			  startpriceInput();	
+			
+	  } else{
+		  console.log($("#auction_open").val());
+		  $("#myModal").fadeIn();
+		  $("#auction_open").val(document.getElementById("startDateDiv").value);
+		  $("#auction_close").val(document.getElementById("endDateDiv").value);
+	  }	
+	}
+	$(".confirmUpdate").click(function(){
+		$("#frmAuction").attr("action","updateauction").submit();
+		
+	});
+	$(".closecomfirm").click(function(){
+		$("#myModal").fadeOut();
+	});
+	
+}
+function startDateInput(){
+	auction_open.oninput = function(){
+		startDateDiv.innerText = "";
+		
+	}
+}
+function endDateInput(){
+	auction_close.oninput = function(){
+		endDateDiv.innerText = "";
+		
+	}
+}
+function startpriceInput(){
+	auction_sprice.oninput = function(){
+		startpriceDiv.innerText = "";
+		
+	}
+}
+
+</script>
+</head>
+<body>
+<div class="login-page">
+  <div class="login-content login-content-signin">
+    <div>
+      <h2>경매상품 수정</h2>
+      <form class="wrapper-box"  id="frmAuction" method="post" th:object="${auction}">
+        <div th:text="|상품번호 : ${auction.auction_no}|"></div>
+        <input type="hidden" name="auction_no" th:value="${auction.auction_no}">
+        
+		<div>시작 날짜&nbsp;&nbsp;<input type="datetime-local" id="auction_open" th:value="${auction.auction_open}" /></div> 
+		<div id="startDateDiv" class="error-message"></div>
+		
+		<input type="hidden" name="auction_open" id="open"/>
+		
+		<div>종료 날짜&nbsp;&nbsp;<input type="datetime-local" id="auction_close" th:value="${auction.auction_close}" /></div>
+		<div id="endDateDiv"  class="error-message"></div>
+		
+		<input type="hidden" name="auction_close" id="close"/>
+		<div> 시작가 <input type="text" id="auction_sprice" name="auction_sprice" th:value="${auction.auction_sprice}"></div>
+		<div id="startpriceDiv" class="error-message"></div>
+      </form>
+        <button id="btnSubmit" th:text="등록하기"></button>
+        <button id="btnBack" onclick="history.back()" th:text="뒤로가기"></button>
+    </div>
+  </div>
+  
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="closecomfirm">x</span>
+    <p class="p">정말 수정할까요?</p>
+    <button class="confirmUpdate">확인</button>
+  </div>
+</div>
+
+<div id="dayModal" class="modal">
+  <div class="modal-content">
+    <span class="closeday">x</span>
+    <p class="p">시작날짜가 종료날짜보다 큽니다</p>
+    <button class="check">확인</button>
+  </div>
+</div>
+</div>
+</body>
+</html>

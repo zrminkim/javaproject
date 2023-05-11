@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"> 
+<head>
+<meta charset="UTF-8">
+<title>술핑몰</title>
+  
+<style type="text/css">
+.board{
+	width : 800px;
+}
+.btn {
+	width : 120px;
+	height : 50px;
+}
+
+a{
+	text-decoration: none;
+}
+
+.grid {border: 1px solid #ccc; text-align: center;}
+.grid .list{
+	margin:20px;
+	display: grid;  
+	grid-template-columns: 15% 25% 15% 15% 15% 15% 
+	padding: 10px 0; 
+	border-bottom: 1px solid #ccc;
+	justify-items:center;
+	align-items:center;
+}
+.grid .list:last-child{
+
+border-bottom: 0;
+}
+
+.grid {text-align: left;}
+.grid .list{
+      padding: 5px 0 0 5px;
+      grid-template-areas: 
+      "col1 col2 col3 col4 col5 col6"
+      "col7 col7 col7 col7 col7 col7"
+}
+.grid .list span.col1{grid-area: col1; padding-bottom: 5px;}
+.grid .list span.col2{grid-area: col2;}
+.grid .list span.col3{grid-area: col3;}
+.grid .list span.col4{grid-area: col4;}
+.grid .list span.col5{grid-area: col5;}
+.grid .list span.col6{grid-area: col6;}
+.grid .list span.col7{
+	grid-area: col7;
+	border-top:1px black;
+}
+div.list.th {
+    margin:0px;
+    background-color: #C0DBEA;
+}
+
+.grid .list span.col7{
+	grid-area: col7;
+ 
+
+}
+
+.col{
+	padding: 20px;
+}
+
+.col6{
+	text-align:center;
+}
+
+.toggle-cont{
+	margin-top:30px;
+}
+
+.page-link{
+background-color: white;
+}
+
+#tit{
+margin-top:50px;
+font : 30px bold;
+}
+
+.grid{
+margin-top:50px;
+}
+</style>
+</head>
+<div layout:fragment="contentFragment">
+
+    <!-- Hero Section Begin -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+            
+
+
+
+<div class="box">
+
+    <span id="tit">상품문의</span>
+    <button type="button" class="btn btn-warning" onclick="location.href = '/boardinsert'">문의하기</button>
+    
+    <div class="grid">
+        <div class="list th">
+            <span class="col col1">답변상태</span>        	
+            <span class="col col2">제목</span>
+            <span class="col col3">작성자</span>
+            <span class="col col4">작성일</span>
+            <span class="col col5">보기</span>  
+            <span class="col col6"> 수정/삭제</span>  
+        </div>
+        <div class="list td"  th:each="qna, status: ${qnas}" id="qnaInfo">
+      	
+      		<span class="col  col1" th:if="${qna.qna_rep}=='N'">답변진행중</span>
+      		<span class="col  col1" th:if="${qna.qna_rep}=='Y'">답변완료</span>
+            <span class="col  col2">[[${qna.qna_subject}]]</span>
+            <span class="col col3">[[${qna.user_num}]]</span>
+            <span class="col col4">[[${qna.qna_regdate}]]</span>
+            <span class="col col5"><button class="btn btn-secondary btnTog" tabindex="-1" role="button" aria-disabled="true">보기</button></span>
+             <span class="col col6">
+            	<a th:href="@{/boardupdate(qna_no=${qna.qna_no})}">수정</a>
+				<a th:href="@{/boarddelete(qna_no=${qna.qna_no})}">삭제</a>
+				
+            </span>  
+            <span  class="col col7 toggle-cont">[[${qna.qna_content}]]</span>
+        </div>
+    </div>
+</div> 
+       <nav aria-label="Page navigation example" >
+  <ul class="pagination justify-content-center">
+    <li class="page-item"><span th:if="${pageVo.startPage > 1}">
+        	<a class="page-link" th:href="@{'board?page=1'}" th:text="'처음&emsp;'" th:style="${'text-decoration: none; color:black;'}" ></a>
+    	</span>
+    </li>
+    <li class="page-item">
+    	<span th:if="${pageVo.isPrev == true}">
+    		<a class="page-link" th:href="@{'board?page='+${pageVo.startPage - 1}}" th:text="'이전'" th:style="${'text-decoration: none; color:black;'}"></a>
+    	</span>
+    </li>
+   <th:block  th:with="start = ${pageVo.startPage}, end = ${pageVo.endPage}">
+	    <li th:classappend="${pageNum == page ? 'page-item active' : 'page-item'}" th:with="start = ${pageVo.startPage}, end = ${pageVo.endPage}" th:each="pageNum : ${#numbers.sequence(start, end)}">
+	    		<a class="page-link" th:href="@{board?(page=${pageNum})}" th:text="|&emsp;${pageNum}&emsp;|" th:style="${'text-decoration: none; color:black;'}"></a>
+	    </li>
+    </th:block>
+    <li class="page-item"> 
+    	<span th:if="${pageVo.isNext == true}">
+			<a class="page-link" th:href="@{'board?page='+|${pageVo.endPage + 1}|}" th:text="'다음'" th:style="${'text-decoration: none; color:black;'}"></a>
+    	</span>
+    </li>
+    <li class="page-item">
+    	<span th:if="${pageVo.endPage < pageVo.totalPageCount}">
+			<a class="page-link" th:href="@{'board?page='+${pageVo.totalPageCount}}" th:text="|&emsp;끝|" th:style="${'text-decoration: none; color:black;'}"></a>
+    	</span>
+    </li>
+  </ul>
+</nav>
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </section>
+    <!-- Blog Section End -->
+<script type="text/javascript">
+
+$(".btnTog").on("click",function(){
+	$(".toggle-cont").toggle();	
+});
+</script>
+</div>
+</html>
+

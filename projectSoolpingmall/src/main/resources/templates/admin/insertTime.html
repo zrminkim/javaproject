@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="html-head">
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>술핑몰 관리자</title>
+
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+	rel="stylesheet" />
+<!-- Core theme CSS (includes Bootstrap)-->
+<link href="/css/styles.css" rel="stylesheet" />
+<link href="/css/admin/admin.css" rel="stylesheet" />
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+</head>
+<body>
+	<div class="container">
+	
+	</div>
+<script type="text/javascript">
+window.onload = function() {
+	  let timedael_begin = document.getElementById('timedael_begin');
+	  let timedealStartDiv = document.getElementById("timedealStartDiv");
+	  
+	  let timedeal_end = document.getElementById('timedeal_end');
+	  let timedealEndDiv = document.getElementById("timedealEndDiv");
+	  
+	  let timedeal_discnt = document.getElementById('timedeal_discnt');
+	  let timedealDiscntDiv = document.getElementById("timedealDiscntDiv");
+	  let msgDiv = document.getElementById("msgDiv");
+	  
+	  let start = new Date(timedeal_begin.value);
+	  let end = new Date(timedeal_end.value);
+	  
+	  let timeDifference = end.getTime() - start.getTime();
+	  let check = /^([1-9]\d?|100)$|^0$/; 
+	  	
+	
+	  timedeal_begin.onblur = function() {
+	    if (timedeal_begin.value === "") {
+	    	timedealStartDiv.innerText = "시작날짜를 입력하세요";
+	    	timedeal_begin.focus();
+	    	timedeal_begin.setAttribute('required', '');
+	    } else {
+	    	timedeal_begin.removeAttribute('required', '');
+	    }
+	    if (timeDifference < 0) {
+	    	$("#dayModal").fadeIn();
+	      }
+	    $(".closeday").click(function(){
+			$("#dayModal").fadeOut();
+		});
+	    $(".check").click(function(){
+			$("#dayModal").fadeOut();
+		});
+	  }
+	  startDateInput();
+	///////////////////////////////////
+	  
+	  timedeal_end.onblur = function() {
+		  let start = new Date(timedeal_begin.value);
+		  let end = new Date(timedeal_end.value);
+		  let timeDifference = end.getTime() - start.getTime();
+	    if (timedeal_end.value === "") {
+	    	timedealEndDiv.innerText = "종료날짜를 입력하세요";
+	    	timedeal_end.focus();
+	    	timedeal_end.setAttribute('required', '');
+	    }else {
+	    	timedeal_end.removeAttribute('required', '');
+	    }
+	    if (timeDifference < 0) {
+	    	$("#dayModal").fadeIn();
+	      }
+	    $(".closeday").click(function(){
+			$("#dayModal").fadeOut();
+		});
+	    $(".check").click(function(){
+			$("#dayModal").fadeOut();
+		});
+	      
+	  }
+	  endDateInput();
+
+	  timedeal_discnt.onblur = function() {
+		    if (timedeal_discnt.value === "") {
+		    	timedealDiscntDiv.innerText = "타임딜 할인율을 입력하세요";
+		    	timedeal_discnt.focus();
+		    	timedeal_discnt.setAttribute('required', '');
+		    }else if(!check.test(timedeal_discnt.value)) {
+		    	timedealDiscntDiv.innerText = "할인율은 숫자형식(0~100)값으로 입력하세요";
+		    	timedeal_discnt.focus();
+		    	timedeal_discnt.setAttribute('required', '');
+		    }
+		    else {
+		    	timedeal_discnt.removeAttribute('required', '');
+		    } 
+		  }
+	  startpriceInput();
+	  
+	  // 경매 시작일 포맷 변경
+	  timedeal_begin.addEventListener("change", () => {
+		  const opendate = new Date(timedeal_begin.value).toISOString().split('T')[0];
+		  const time = new Date(timedeal_begin.value).toTimeString().split(' ')[0];
+		  document.getElementById("timedealStartDiv").value = opendate+ " "+ time;
+		  console.log(document.getElementById("timedealStartDiv").textContent);
+		  $("#open").val(opendate+ " " + time);
+		  console.log($("#timedeal_begin").val());
+		});
+	  
+	  // 경매 종료일 포맷 변경
+	  timedeal_end.addEventListener("change", () => {
+		  const closedate = new Date(timedeal_end.value).toISOString().split('T')[0];
+		  const time = new Date(timedeal_end.value).toTimeString().split(' ')[0];
+		  document.getElementById("timedealEndDiv").value = closedate+ " " + time;
+		  $("#close").val(closedate+ " " + time);
+		  console.log(document.getElementById("timedealEndDiv").textContent);
+		});
+	  
+	  document.getElementById('btnSubmit').onclick = function(){
+		  if(timedeal_begin.value === "" || timedeal_end.value === "" 
+			  || timedeal_discnt.value === "" && !check.test(timedeal_discnt)){
+			  if (timedeal_begin.value === "") {
+				  timedealStartDiv.innerText = "시작날짜를 입력하세요";
+				  timedeal_begin.focus();
+				  timedael_begin.setAttribute('required', '');
+			    } else {
+			    	timedeal_begin.removeAttribute('required', '');
+			    }
+			  startDateInput();
+			  
+			  if (timedeal_end.value === "") {
+				  timedealEndDiv.innerText = "종료날짜를 입력하세요";
+				  timedeal_end.focus();
+				  timedeal_end.setAttribute('required', '');
+			    } else {
+			    	timedeal_end.removeAttribute('required', '');
+			    }
+			  endDateInput();
+			  
+			  if (timedeal_discnt.value === "") {
+				  timedealDiscntDiv.innerText = "타임딜 할인율을 입력하세요";
+				  timedeal_discnt.focus();
+				  timedeal_discnt.setAttribute('required', '');
+			    } else {
+			    	timedeal_discnt.removeAttribute('required', '');
+			    }
+			  startpriceInput();	
+			
+	  } else{
+		  //frmProduct.submit;
+		  $("#timedeal_begin").val(document.getElementById("timedealStartDiv").value);
+		  $("#timedeal_end").val(document.getElementById("timedealEndDiv").value);
+		  console.log($("#timedeal_begin").val());
+		  console.log($("#timedeal_end").val());
+		  $("#myModal").fadeIn();
+	  }	
+	}
+	$(".confirmUpdate").click(function(){
+		$("#frmAuction").attr("action","inserttimedeal").submit();
+		
+	});
+	$(".closecomfirm").click(function(){
+		$("#myModal").fadeOut();
+	});
+	
+}
+function startDateInput(){
+	timedeal_begin.oninput = function(){
+		timedealStartDiv.innerText = "";
+		
+	}
+}
+function endDateInput(){
+	timedeal_end.oninput = function(){
+		timedealEndDiv.innerText = "";
+		
+	}
+}
+function startpriceInput(){
+	timedeal_discnt.oninput = function(){
+		timedealDiscntDiv.innerText = "";
+		
+	}
+}
+
+</script>
+</head>
+<body>
+<div class="login-page">
+  <div class="login-content login-content-signin">
+    <div>
+      <h2>타임딜상품 등록</h2>
+      <form class="wrapper-box"  id="frmAuction" method="post">
+        <div th:text="|상품번호 : ${product_no}|"></div>
+        <input type="hidden" name="product_no" th:value="${product_no}">
+        
+		<div>시작 날짜&nbsp;&nbsp;<input type="datetime-local" id="timedeal_begin" /></div> 
+		<div id="timedealStartDiv" class="error-message"></div>
+		<input type="hidden" name="timedeal_begin" id="open"/>
+		
+		<div>종료 날짜&nbsp;&nbsp;<input type="datetime-local" id="timedeal_end" /></div>
+		<div id="timedealEndDiv"  class="error-message"></div>
+		<input type="hidden" name="timedeal_end" id="close"/>
+		
+		<div> 할인율 <input type="text" id="timedeal_discnt" name="timedeal_discnt"></div>
+		<div id="timedealDiscntDiv" class="error-message"></div>
+      </form>
+        <button id="btnSubmit" th:text="등록하기"></button>
+        <button id="btnBack" onclick="history.back()" th:text="뒤로가기"></button>
+    </div>
+  </div>
+  
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="closecomfirm">x</span>
+    <p class="p">정말 등록할까요?</p>
+    <button class="confirmUpdate">확인</button>
+  </div>
+</div>
+
+<div id="dayModal" class="modal">
+  <div class="modal-content">
+    <span class="closeday">x</span>
+    <p class="p">시작날짜가 종료날짜보다 큽니다</p>
+    <button class="check">확인</button>
+  </div>
+</div>
+</div>
+</body>
+</html>

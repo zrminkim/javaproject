@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragmentsAdmin/layout}"> <!-- default layout 사용 -->
+      
+
+<!-- 페이지의 개별적인 css, js 설정 영역 -->
+<!-- thymeleaf layout dialect가 content페이지의 head태그를 layout의 head태그에 자동으로 추가해준다. -->
+    <title>술핑몰</title>
+
+<!-- 페이지의 실제 content 내용 -->
+
+<div layout:fragment="contentFragment">
+<main id="main" class="main">
+   <table>
+		<tr>
+			<th>상품이미지</th>
+			<th>상품번호</th>
+			<th>상품명</th>
+			<th>상품가격</th>
+			<th>상품종류</th>
+			<th>나라</th>
+			<th>용량</th>
+			<th>재고</th>
+			<th>등급</th>
+			<th>수정/삭제</th>
+		</tr>
+		<tr th:each="product: ${products}">
+			<td><img th:src="@{/images/product/}+${product.product_img}" /></td>
+			<td><div th:text="${product.product_no}"></div><input type="hidden" id="product_no" th:value="${product.product_no}"></td>
+			<td>[[${product.product_name}]]</td>
+			<td>[[${product.product_price}]]</td>
+			<td>[[${product.product_type}]]</td>
+			<td>[[${product.product_cntr}]]</td>
+			<td>[[${product.product_volume}]]</td>
+			<td>[[${product.product_stock}]]</td>
+			<td>[[${product.product_level}]]</td>
+			<td>
+			<button type="button"  id="btnEdit">수정</button>
+			<button type="button"  id="btnDel">삭제</button>
+			<button type="button" id="btnAuction" name="btnAuction" th:value="${product.product_no}">경매</button>
+			<button type="button" id="btnTimeDeal" name="btnTimeDeal" th:value="${product.product_no}">타임</button>
+			</td>
+		</tr>
+	</table>
+<nav aria-label="Page navigation example" >
+  <ul class="pagination justify-content-center">
+    <li class="page-item"><span th:if="${pageVo.startPage > 1}">
+        	<a class="page-link" th:href="@{'adminManagerSearch?page=1'+'&searchProduct='+|${searchProduct}|+'&searchValue='+|${searchValue}|}" th:text="'처음&emsp;'" th:style="${'text-decoration: none; color:black;'}" ></a>
+    	</span>
+    </li>
+    <li class="page-item">
+    	<span th:if="${pageVo.isPrev == true}">
+    		<a class="page-link" th:href="@{'adminManagerSearch?page='+${pageVo.startPage - 1}+'&searchProduct='+|${searchProduct}|+'&searchValue='+|${searchValue}|}" th:text="'이전'" th:style="${'text-decoration: none; color:black;'}"></a>
+    	</span>
+    </li>
+   <th:block  th:with="start = ${pageVo.startPage}, end = ${pageVo.endPage}">
+	    <li th:classappend="${pageNum == page ? 'page-item active' : 'page-item'}" th:with="start = ${pageVo.startPage}, end = ${pageVo.endPage}" th:each="pageNum : ${#numbers.sequence(start, end)}">
+	    		<a class="page-link" th:href="@{adminManagerSearch?(page=${pageNum},searchProduct=${searchProduct},searchValue=${searchValue})}" th:text="|&emsp;${pageNum}&emsp;|" th:style="${'text-decoration: none; color:black;'}"></a>
+	    </li>
+    </th:block>
+    <li class="page-item"> 
+    	<span th:if="${pageVo.isNext == true}">
+			<a class="page-link" th:href="@{'adminManagerSearch?page='+|${pageVo.endPage + 1}|+'&searchProduct='+|${searchProduct}|+'&searchValue='+|${searchValue}|}" th:text="'다음'" th:style="${'text-decoration: none; color:black;'}"></a>
+    	</span>
+    </li>
+    <li class="page-item">
+    	<span th:if="${pageVo.endPage < pageVo.totalPageCount}">
+			<a class="page-link" th:href="@{'adminManagerSearch?page='+${pageVo.totalPageCount}+'&searchProduct='+|${searchProduct}|+'&searchValue='+|${searchValue}|}" th:text="|&emsp;끝|" th:style="${'text-decoration: none; color:black;'}"></a>
+    	</span>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-light bg-light">
+  <div class="container-fluid justify-content-center">
+    <form class="d-flex" action="adminManagerSearch" method="get">
+    	<select class="form-select" aria-label="Default select example" name="searchProduct">
+  			<option value="product_type" th:checked="checked">종류</option>
+  			<option value="product_cntr">나라</option>
+		</select>
+      <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search" name="searchValue">
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+</main>
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">x</span>
+    <p>정말 삭제할까요?</p>
+    <button class="confirmUpdate">확인</button>
+  </div>
+</div>
+
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+	let btnPno = "";
+	let uplink = '/update?product_no=';
+	let dellink = '/delete?product_no=';
+	let auclink = '/auction?product_no=';
+	let timelink = '/timedeal?product_no=';
+	let deleteName ="";
+	let auctionName ="";
+	// 수정버튼
+	$("button[name=btnEdit]").on("click",function(){
+		location.href = uplink + $(this).val();		
+	});
+	
+	//삭제 버튼
+	$("button[name=btnDelete]").on("click",function(){
+		btnPno = $(this).val();
+		$(".modal").fadeIn();
+	});
+	
+	//경매 상품 등록 버튼
+	$("button[name=btnAuction]").on("click",function(){
+		location.href = auclink + $(this).val();	
+	});
+	
+	$("button[name=btnTimeDeal]").on("click",function(){
+		location.href = timelink + $(this).val();	
+	});
+	
+	// 모달
+	$(".confirmUpdate").click(function(){		
+		location.href = dellink + btnPno;
+		
+	});
+	$(".close").click(function(){
+		$(".modal").fadeOut();
+	});
+	
+/*]]>*/
+</script>
+</div>
+</html>

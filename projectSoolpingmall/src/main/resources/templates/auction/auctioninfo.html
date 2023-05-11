@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"> <!-- default layout 사용 -->
+      
+
+<!-- 페이지의 개별적인 css, js 설정 영역 -->
+<!-- thymeleaf layout dialect가 content페이지의 head태그를 layout의 head태그에 자동으로 추가해준다. -->
+    <title>술핑몰</title>
+
+<!-- 페이지의 실제 content 내용 -->
+
+
+<div layout:fragment="contentFragment">
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script>
+$(document).ready(function () {
+
+		  $('button[name="writeReply"]').click(function(){
+			  if($("#cost").val() < $("#price").val() || $("#cost").val() < $("#sprice").val()  ){
+				  alert("1");
+				return
+			  }else{
+			 	 $("form").submit();
+			  }
+			});
+		});
+
+</script>
+    <!-- Hero Section Begin -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+
+
+    <!-- Product Details Section Begin -->
+    <section class="product-details spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <div class="product__details__pic">
+                        <div class="product__details__pic__item">
+                            <img class="product__details__pic__item--large"
+                               th:src="@{/images/product/${lists.product_img}}" alt="">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="product__details__text">
+                        <h3 th:text=${auction.product_name}></h3>
+                        <div class="product__details__rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-half-o"></i>
+                            <span>(18 reviews)</span>
+                        </div>
+                        <div class="product__details__price" th:text="${auction.product_price}+'원'"></div>
+                        <div class="product__details__price" th:text="'경매시작가 : '+${auction.auction_sprice}+'원'"></div>
+                        <th:block th:if="${not #strings.isEmpty(auction.auctionp_price)}">
+	                        <div class="product__details__price" th:text="'현재최고가 : '+${auction.auctionp_price}+'원'"></div>
+	                        <input type="hidden" id="price" th:value="${auction.auctionp_price}">
+	                        <input type="hidden" id="sprice" th:value="${auction.auction_sprice}">
+						</th:block>
+                        <th:block th:if="${#strings.isEmpty(auction.auctionp_price)}">
+	                        <div class="product__details__price">현재 입찰자 없음</div>
+						</th:block>
+						
+                        <form action="startBid" id="startBid" method="post">
+	                        <div class="product__details__quantity">
+	                            <div class="quantity">
+                      	        <input type="text" id="cost" name="auctionp_price" value="">원
+                      	        <input type="hidden" name="auction_num" th:value="${auction.auction_no}">
+                      	        <input type="hidden" name="product_num" th:value="${auction.product_no}">
+	                            </div>
+	                        </div>
+                        <a id="action" class="primary-btn">입찰</a>
+                        </form>
+                        <ul>
+                            <li><b>Availability</b> <span>In Stock</span></li>
+                            <li><b>용량</b> <span th:text="${auction.product_volume} + 'ml'"></span></li>
+                            <li><b>도수</b> <span th:text="${auction.product_level} + '도'"></span></li>
+                        </ul>
+                    </div>
+                </div>
+            
+            
+<nav aria-label="Page navigation example" >
+                
+     	<th:block th:if="${not #lists.isEmpty(pro)}">                      
+		<table>
+		<tr>
+			<th>id</th>
+			<th>입찰액</th>
+			<th>입찰시간</th>
+		</tr>	
+           <tr th:each="p: ${pro}">
+			<td><div th:text="${p.user_id}"></div>
+			<td><div th:text="${p.auctionp_price}"></div>
+			<td><div th:text="${#dates.format(p.auctionp_time, 'yyyy.MM.dd HH:mm:ss')}"></div>
+			</td>
+			
+		</tr>
+</table>        
+              <br>
+
+
+  <ul class="pagination justify-content-center">
+    <li class="page-item"><span th:if="${pageVo.startPage > 1}">
+        	<a class="page-link" th:href="@{'auctionInfo?page=1'}" th:text="'처음&emsp;'" th:style="${'text-decoration: none; color:black;'}" ></a>
+    	</span>
+    </li>
+    <li class="page-item">
+    	<span th:if="${pageVo.isPrev == true}">
+    		<a class="page-link" th:href="@{'auctionInfo?page='+${pageVo.startPage - 1}}" th:text="'이전'" th:style="${'text-decoration: none; color:black;'}"></a>
+    	</span>
+    </li>
+   <th:block  th:with="start = ${pageVo.startPage}, end = ${pageVo.endPage}">
+	    <li th:classappend="${pageNum == page ? 'page-item active' : 'page-item'}" th:with="start = ${pageVo.startPage}, end = ${pageVo.endPage}" th:each="pageNum : ${#numbers.sequence(start, end)}">
+	    		<a class="page-link" th:href="@{auctionInfo?(page=${pageNum})}" th:text="|&emsp;${pageNum}&emsp;|" th:style="${'text-decoration: none; color:black;'}"></a>
+	    </li>
+    </th:block>
+    <li class="page-item"> 
+    	<span th:if="${pageVo.isNext == true}">
+			<a class="page-link" th:href="@{'auctionInfo?page='+|${pageVo.endPage + 1}|}" th:text="'다음'" th:style="${'text-decoration: none; color:black;'}"></a>
+    	</span>
+    </li>
+    <li class="page-item">
+    	<span th:if="${pageVo.endPage < pageVo.totalPageCount}">
+			<a class="page-link" th:href="@{'auctionInfo?page='+${pageVo.totalPageCount}}" th:text="|&emsp;끝|" th:style="${'text-decoration: none; color:black;'}"></a>
+    	</span>
+    </li>
+  </ul>
+</nav>
+</th:block>
+<th:block th:if="${#lists.isEmpty(purchase)}">
+</th:block>
+
+
+            </div>
+        </div>
+    </section>
+    <!-- Blog Section End -->
+    </div>
+    </div>
+    </section>
+
+</div>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"> <!-- default layout 사용 -->
+      
+
+<!-- 페이지의 개별적인 css, js 설정 영역 -->
+<!-- thymeleaf layout dialect가 content페이지의 head태그를 layout의 head태그에 자동으로 추가해준다. -->
+    <title>술핑몰</title>
+
+<!-- 페이지의 실제 content 내용 -->
+
+<div layout:fragment="contentFragment">
+<script>
+$(document ).ready(function() {
+	$("button[name='delwish']").click(function () {
+	    alert("dd");
+	  });
+});
+</script>
+
+
+    <!-- Hero Section Begin -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+
+		<div th:insert="~{user/usersidebar::sidebar}"></div>
+        <div class="container" style="width: 830px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shoping__cart__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                   <th class="shoping__product" th:text="상품명"></th>
+										<th th:text="종류"></th>
+										<th th:text="가격"></th>
+										<th th:text="비고"></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            	<th:block th:if="${#lists.isEmpty(products)}">
+                            	<tr><td>장바구니가 비어있습니다</td></tr>
+								</th:block>
+								<th:block th:unless="${#lists.isEmpty(products)}">
+								<tr th:each="product:${products}">
+								<th:block th:if="${products} != null">	
+                                    <td class="shoping__cart__item">
+                                        <input type="hidden" th:value="${product.product_name}" th:name="cart_no">
+											<img th:src="|@{/images/product/}${product.product_img}|" style="width: 100px;"> 
+											[[${product.product_name}]]
+                                    </td>
+                                    </th:block>
+									<td class="shoping__cart__price" th:text="${product.product_type}" th:id="|product_price_${product.product_no}|">
+										<input type="hidden" th:name="product_price"
+										th:value="${product.product_price}" th:id="|product_price_${product.product_name}|">
+									</td>
+									<td class="shoping__cart__price" th:text="${product.product_price}" th:id="|product_price_${product.product_no}|">
+										<input type="hidden" th:name="product_price"
+										th:value="${product.product_price}" th:id="|product_price_${product.product_name}|">
+									</td>
+                                    <td class="shoping__cart__price"  th:data-product-num="${product.product_no}">
+									<form action="delwish" method="post">
+                                        <button id="delwish" name="delwish" th:value="${product.product_no}">삭제</button>
+                                    </form>
+                                    </td> 
+                                </tr>
+                         	</th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <nav aria-label="Page navigation example" >
+  <ul class="pagination justify-content-center">
+    <li class="page-item"><span th:if="${pageVo.startPage > 1}">
+        	<a class="page-link" th:href="@{'userWishList?page=1'}" th:text="'처음&emsp;'" th:style="${'text-decoration: none; color:black;'}" ></a>
+    	</span>
+    </li>
+    <li class="page-item">
+    	<span th:if="${pageVo.isPrev == true}">
+    		<a class="page-link" th:href="@{'userWishList?page='+${pageVo.startPage - 1}}" th:text="'이전'" th:style="${'text-decoration: none; color:black;'}"></a>
+    	</span>
+    </li>
+   <th:block  th:with="start = ${pageVo.startPage}, end = ${pageVo.endPage}">
+	    <li th:classappend="${pageNum == page ? 'page-item active' : 'page-item'}" th:with="start = ${pageVo.startPage}, end = ${pageVo.endPage}" th:each="pageNum : ${#numbers.sequence(start, end)}">
+	    		<a class="page-link" th:href="@{userWishList?(page=${pageNum})}" th:text="|&emsp;${pageNum}&emsp;|" th:style="${'text-decoration: none; color:black;'}"></a>
+	    </li>
+    </th:block>
+    <li class="page-item"> 
+    	<span th:if="${pageVo.isNext == true}">
+			<a class="page-link" th:href="@{'userWishList?page='+|${pageVo.endPage + 1}|}" th:text="'다음'" th:style="${'text-decoration: none; color:black;'}"></a>
+    	</span>
+    </li>
+    <li class="page-item">
+    	<span th:if="${pageVo.endPage < pageVo.totalPageCount}">
+			<a class="page-link" th:href="@{'userWishList?page='+${pageVo.totalPageCount}}" th:text="|&emsp;끝|" th:style="${'text-decoration: none; color:black;'}"></a>
+    	</span>
+    </li>
+  </ul>
+</nav>
+        </div>
+            <!-- Page content wrapper-->
+		
+
+
+
+
+
+            </div>
+        </div>
+    </section>
+    <!-- Blog Section End -->
+
+</div>
+</html>

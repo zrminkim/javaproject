@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"> <!-- default layout 사용 -->
+ <head>  
+<!-- jquery (jquery가 부트스트랩보다 위에)  -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-latest.js"></script>
+<!-- CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<!-- 테마 -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<!-- 부츠워치 -->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css" integrity="sha384-9+PGKSqjRdkeAU7Eu4nkJU8RFaH8ace8HGXnkiKMP9I9Te0GJ4/km3L1Z8tXigpG" crossorigin="anonymous">
+<!-- 자바스크립트 -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+<!-- 페이지의 개별적인 css, js 설정 영역 -->
+<style>
+.container{
+width : 50%;
+height: 100%;
+justify-content: center;
+text-align: center;
+
+
+}
+#frm{
+margin-top:50px;
+}
+
+.form-group{
+margin-bottom:3px;
+}
+</style>
+<!-- thymeleaf layout dialect가 content페이지의 head태그를 layout의 head태그에 자동으로 추가해준다. -->
+    <title>술핑몰</title>
+</head>  
+<!-- 페이지의 실제 content 내용 -->
+
+<div layout:fragment="contentFragment">
+
+    <!-- Hero Section Begin -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+
+
+
+<!-- 모달 -->
+
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">아이디 찾기</h5>
+      </div>
+      <div class="modal-body">
+        이메일로 조회된 회원정보가 존재하지 않습니다.
+      </div>
+      <div class="modal-footer">
+        <button type="button"  id="btnHome"class="btn btn-secondary">메인으로</button>
+        <button type="button"  id="btnRetry"  class="btn btn-primary" data-bs-dismiss="modal">다시 찾기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="container">
+
+
+	<h2>Search Your ID</h2>
+	<p class="text text-primary">아래의 예시와 같이<br> 회원가입 시 등록된 이메일을 입력해주세요.</p>
+	<p class="text text-muted">예 : gildong1234@naver.com</p>
+	
+	
+	
+	<form id="frm">
+		<!-- 이메일 -->
+		<div class="form-group">
+	      <label for="exampleInputEmail1" class="form-label mt-4">Email address</label>
+	      <input type="email" name="user_email"  class="form-control" id="user_email" aria-describedby="emailHelp" placeholder="Enter email">
+	      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+	    </div>
+	    <button type="button" id="btnFindId"  class="btn btn-outline-success">아이디 찾기</button>
+		
+		<button type="button" onclick = "location.href='/findPasswd'" class="btn btn-link">비밀번호 찾기</button>
+	</form>
+</div>
+
+
+
+
+<script type="text/javascript">
+const user_email = document.querySelector("#user_email");
+
+
+
+/*
+$(document).ready(function(){
+	$('#btnFindId').click(function(e){
+		if()
+		$('#myModal').modal("show"); 
+	}
+}
+*/
+
+
+	// 아이디 찾기 클릭 -> 회원객체를 찾지 못한 경우 모달창 / 찾은 경우 결과 페이지로 이동
+$(document).ready(function(){	
+	$('#btnFindId').click(function(e){
+	
+		e.preventDefault();
+		$.ajax({
+			type:"POST",
+			url:"/findId",
+			data : {"user_email": user_email.value}, // 주의!) 위에서 변수에 선언하고 변수를 여기에 value가 안들어감
+			dataType:"text", // cf)  contentype은 기본값
+			success:function(result){ 
+			
+				if(result === "x"){ 			// 못 찾은 경우 : 모달창 띄우기
+					$('#myModal').modal("show"); 
+			
+				} else { 						// 찾은 경우 : 회원id를 가지고 결과 페이지로 이동
+				
+					// 보안상 변경 필요 ############################
+					location.href="findIdResult?user_id="+result; // result=회원id
+				}
+			},
+			error:function(e){
+				console.log("findId ajax err  :  "+e.getMessage);
+			}
+		});	
+		
+
+	});
+	
+});
+
+$("#btnHome").click(function(){ // 모달창)메인으로 click
+	location.href="/index";
+});
+
+$("#btnRetry").click(function(){ // 모달창)다시시도 click-> 모달창 닫기
+	$('#myModal').modal('hide');
+});
+
+
+
+
+</script>
+		
+
+
+
+
+            </div>
+        </div>
+    </section>
+    <!-- Blog Section End -->
+
+</div>
+</html>

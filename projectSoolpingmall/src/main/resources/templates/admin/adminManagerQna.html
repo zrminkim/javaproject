@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragmentsAdmin/layout}"> <!-- default layout 사용 -->
+      
+
+<!-- 페이지의 개별적인 css, js 설정 영역 -->
+<!-- thymeleaf layout dialect가 content페이지의 head태그를 layout의 head태그에 자동으로 추가해준다. -->
+    <title>술핑몰</title>
+
+<!-- 페이지의 실제 content 내용 -->
+
+<div layout:fragment="contentFragment">
+<main id="main" class="main">
+   <table>
+		<tr>
+			<th>게시판번호</th>
+			<th>고객번호</th>
+			<th>제목</th>
+			<th>내용</th>
+			<th>답변</th>
+			<th>비밀글 여부</th>
+			<th>답변상태</th>
+			<th>타입</th>
+			<th>gno</th>
+			<th>비밀 공개글/답변</th>
+		</tr>
+		<tr th:each="qna, status: ${qnas}" id="qnaInfo">
+			<td><div th:text="${qna.qna_no}"></div><input type="hidden" id="qna_no" th:value="${qna.qna_no}"
+			th:with="qnaNo=${qna.qna_no}"/></td>
+			<td>[[${qna.user_num}]]</td>
+			<td>[[${qna.qna_subject}]]</td>
+			<td>[[${qna.qna_content}]]</td>
+			<td>[[${qna.qna_reply}]]</td>
+			<td>[[${qna.qna_secret}]]</td>
+			<td>[[${qna.qna_rep}]]</td>
+			<td>[[${qna.qna_type}]]</td>
+			<td>[[${qna.qna_gno}]]</td>
+			<td>
+			<button type="button" id="btnSecret" name="btnSecret" th:value="${qna.qna_no}">비밀글/공개글</button>
+			<button type="button" id="btnReplSuccess" name="btnReplSuccess" th:value="${qna.qna_no}" >답변완료</button>
+			</td>
+		</tr>
+	</table>
+<nav aria-label="Page navigation example" >
+  <ul class="pagination justify-content-center">
+    <li class="page-item"><span th:if="${pageVo.startPage > 1}">
+        	<a class="page-link" th:href="@{'qnamanager?page=1'}" th:text="'처음&emsp;'" th:style="${'text-decoration: none; color:black;'}" ></a>
+    	</span>
+    </li>
+    <li class="page-item">
+    	<span th:if="${pageVo.isPrev == true}">
+    		<a class="page-link" th:href="@{'qnamanager?page='+${pageVo.startPage - 1}}" th:text="'이전'" th:style="${'text-decoration: none; color:black;'}"></a>
+    	</span>
+    </li>
+   <th:block  th:with="start = ${pageVo.startPage}, end = ${pageVo.endPage}">
+	    <li th:classappend="${pageNum == page ? 'page-item active' : 'page-item'}" th:with="start = ${pageVo.startPage}, end = ${pageVo.endPage}" th:each="pageNum : ${#numbers.sequence(start, end)}">
+	    		<a class="page-link" th:href="@{qnamanager?(page=${pageNum})}" th:text="|&emsp;${pageNum}&emsp;|" th:style="${'text-decoration: none; color:black;'}"></a>
+	    </li>
+    </th:block>
+    <li class="page-item"> 
+    	<span th:if="${pageVo.isNext == true}">
+			<a class="page-link" th:href="@{'qnamanager?page='+|${pageVo.endPage + 1}|}" th:text="'다음'" th:style="${'text-decoration: none; color:black;'}"></a>
+    	</span>
+    </li>
+    <li class="page-item">
+    	<span th:if="${pageVo.endPage < pageVo.totalPageCount}">
+			<a class="page-link" th:href="@{'qnamanager?page='+${pageVo.totalPageCount}}" th:text="|&emsp;끝|" th:style="${'text-decoration: none; color:black;'}"></a>
+    	</span>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-light bg-light">
+  <div class="container-fluid justify-content-center">
+    <form class="d-flex" action="adminManagerQnaSearch" method="get">
+    	<select class="form-select" aria-label="Default select example" name="searchSubject">
+  			<option value="qna_content" th:checked="checked">제목</option>
+		</select>
+      <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search" name="searchValue">
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+<main id="main" class="main">
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">x</span>
+    <p>처리를 진행할까요?</p>
+    <button class="confirmUpdate">확인</button>
+  </div>
+</div>
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+ //게시판 용 비밀글, 답변 업데이트 문 진행
+ 	let btnlinkSecret = "";
+ 	let btnlinkApply = "";
+ 	let uplinkSecret = '/updateQnaSecret?qna_no=';
+	let uplinkApply = '/updateQnaApply?qna_no=';
+	let secretName = "";
+	let successName = "";
+	let name = "";
+	$("button[name=btnSecret]").on("click",function(){
+		btnlinkSecret = $(this).val();
+		secretName = $(this).attr("name");
+		name=secretName;
+		$(".modal").fadeIn();
+	});
+	
+	$("button[name=btnReplSuccess]").on("click",function(){
+		btnlinkApply = $(this).val();
+		successName = $(this).attr("name");
+		name=successName;
+		$(".modal").fadeIn();
+	});
+
+	// 모달
+	$(".confirmUpdate").click(function(){
+		if(name===secretName){
+			location.href = uplinkSecret + btnlinkSecret;			
+		}
+		if(name === successName ){
+			location.href = uplinkApply + btnlinkApply;
+		}
+	});
+	$(".close").click(function(){
+			$(".modal").fadeOut();
+	});
+/*]]>*/
+</script>
+
+</div>
+</html>

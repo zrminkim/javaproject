@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+window.onload = function() {
+	  let id = document.getElementById('id');
+	  let passwd = document.getElementById('password');
+	  let idDiv = document.getElementById("idDiv");
+	  let passDiv = document.getElementById("passwdDiv");
+	  let msgDiv = document.getElementById("msgDiv");
+
+	  id.onblur = function() {
+	    if (id.value === "") {
+	      idDiv.innerText = "아이디를 입력하세요";
+	      id.setAttribute('required', '');
+	    } else {
+	      id.removeAttribute('required', '');
+	    }
+	  }
+	  idInput();
+
+	  passwd.onblur = function() {
+	    if (passwd.value === "") {
+	      passDiv.innerText = "비밀번호를 입력하세요";
+	      passwd.setAttribute('required', '');
+	    } else {
+	      passwd.removeAttribute('required', '');
+	    }
+	  }
+	  passwdInput(passwd);
+	  
+	  
+	  document.getElementById('btnSubmit').onclick = function(){
+		  if(id.value === "" && passwd.value === "" ){
+			  if (id.value === "") {
+			      idDiv.innerText = "아이디를 입력하세요";
+			      id.setAttribute('required', '');
+			    } else {
+			      id.removeAttribute('required', '');
+			    }
+			  
+			  if (passwd.value === "") {
+			      passDiv.innerText = "비밀번호를 입력하세요";
+			      passwd.setAttribute('required', '');
+			    } else {
+			      passwd.removeAttribute('required', '');
+			    }
+		  }else{
+			  frmLogin.submit;
+		  }
+			
+	  }
+}
+function idInput(){
+	id.oninput = function(){
+		idDiv.innerText = "";
+		msgDiv.innerText = "";
+	}
+}
+function passwdInput(passwd){
+	passwd.oninput = function(){
+		passwdDiv.innerText = "";
+		msgDiv.innerText = "";
+	}
+}
+
+
+</script>
+<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link href="/css/admin/admin.css" rel="stylesheet" />
+</head>
+<body>
+<div class="login-page">
+  <div class="login-content login-content-signin">
+    <div>
+      <h2>Log in</h2>
+      <form action="adminLogin" class="wrapper-box"  id="frmLogin" method="post">
+        <input type="text" name="id" id="id" placeholder="아이디를 입력하세요" />
+        <div id="idDiv" class="error-message"></div>
+        <input type="password" name="password" id="password" placeholder="비밀번호를 입력하세요"/>
+        <div id="passwdDiv" class="error-message"></div>
+        <button id="btnSubmit" class="btn btn-submit btn-default pull-right">Log in</button>
+        <div th:text="${msg}" id="msgDiv"></div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

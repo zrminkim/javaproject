@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"> <!-- default layout 사용 -->
+      
+<!-- jquery (jquery가 부트스트랩보다 위에)  -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-latest.js"></script>
+<!-- CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<!-- 테마 -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<!-- 부츠워치 -->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css" integrity="sha384-9+PGKSqjRdkeAU7Eu4nkJU8RFaH8ace8HGXnkiKMP9I9Te0GJ4/km3L1Z8tXigpG" crossorigin="anonymous">
+<!-- 자바스크립트 -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<!-- 페이지의 개별적인 css, js 설정 영역 -->
+<style>
+.row{
+  margin: 25px;
+  width: 350px;
+  height: 200px;
+  outline: dashed 1px black;
+}
+
+.container{
+width : 1000px;
+height: 500px;
+justify-content: center;
+text-align: center;
+
+
+}
+#frm{
+margin-top:50px;
+}
+
+.form-group{
+margin-bottom:3px;
+}
+
+.h2{
+margin-top:20px;
+}
+
+.text{
+margin-top:20px;
+}
+button{
+
+margin-top:20px;
+}
+</style>
+<!-- thymeleaf layout dialect가 content페이지의 head태그를 layout의 head태그에 자동으로 추가해준다. -->
+    <title>술핑몰</title>
+
+<!-- 페이지의 실제 content 내용 -->
+
+<div layout:fragment="contentFragment">
+
+    <!-- Hero Section Begin -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+	<div class="container">
+		<h2>아이디 찾기 결과</h2>
+		<div class="box">
+			<p class="text text-primary">회원님의 이메일로 가입된 아이디가 있습니다</p>
+			<p class="text-info">[[${data}]]</p>
+			
+		</div>
+		
+		
+		<button type="button" id="btnFindPasswd" class="btn btn-outline-primary">비밀번호 찾기</button>
+		<button type="button"  id="btnLogin" class="btn btn-outline-success">로그인</button>
+	</div>
+
+
+
+
+<script type="text/javascript">
+document.querySelector("#btnLogin").addEventListener("click",function(){
+	location.href="/login";
+})
+document.querySelector("#btnFindPasswd").addEventListener("click",function(){
+	location.href="/findPasswd";
+})
+</script>
+
+
+
+
+            </div>
+        </div>
+    </section>
+    <!-- Blog Section End -->
+
+</div>
+</html>

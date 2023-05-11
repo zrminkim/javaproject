@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="navigationFragment">
+ <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Humberger Begin -->
+    <div class="humberger__menu__overlay"></div>
+    <div class="humberger__menu__wrapper">
+        <div class="humberger__menu__logo">
+            <a href="#"><img src="img/logo.png" alt=""></a>
+        </div>
+        <div class="humberger__menu__cart">
+            <ul>
+                <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                <li><a href="#"><i class="fa fa-shopping-bag"></i></a></li>
+            </ul>
+            
+        </div>
+        <div class="humberger__menu__widget">
+            
+            <div class="header__top__right__auth">
+           		<th:block th:if="${#strings.isEmpty(session.userNo) and #strings.isEmpty(session.access_token_k) and #strings.isEmpty(session.access_token_g)}"> <!-- 로그인 상태 X -->
+                           <a href="login" style="padding-right: 30px;"><i class="fa fa-user"></i> Login</a>
+                           <a href="signUp" style="padding-right: 30px;"><i class="fa fa-user"></i>Sign Up</a>					
+				</th:block>
+				
+				<th:block th:if="${not #strings.isEmpty(session.userNo) or not #strings.isEmpty(session.access_token_k)  or not #strings.isEmpty(session.access_token_g)}"> <!-- 로그인 상태 O -->
+                           <a href="logout" style="padding-right: 30px;"><i class="fa fa-user"></i> Logout</a>
+                           <a href="/userInfo"><i class="fa fa-user"></i> Mypage</a>
+				</th:block>
+            </div>
+        </div>
+        <nav class="humberger__menu__nav mobile-menu">
+            <ul>
+                            
+                            <li><a href="./shop-grid.html">술 한눈에 보기</a>
+                            	<ul class="header__menu__dropdown">
+                                    <li><a href="productdetail?product_no=1">소주</a></li>
+                                    <li><a href="./shoping-cart.html">맥주</a></li>
+                                    <li><a href="./checkout.html">와인</a></li>
+                                    <li><a href="./blog-details.html">위스키</a></li>
+                                    <li><a href="./blog-details.html">보드카</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">경매</a></li>
+                            <li><a href="./blog.html">커뮤니티</a>
+                            <ul class="header__menu__dropdown">
+                                    <li><a href="./shop-details.html">이벤트</a></li>
+                                    <li><a href="./shoping-cart.html">공지사항</a></li>
+                                </ul>
+                                </li>
+                            <li><a href="./contact.html">취향</a></li>
+                        </ul>
+        </nav>
+        <div id="mobile-menu-wrap"></div>
+       
+        <div class="humberger__menu__contact">
+            
+        </div>
+    </div>
+    <!-- Humberger End -->
+
+    <!-- Header Section Begin -->
+    <header class="header">
+        <div class="header__top">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6"></div>
+            <div class="col-lg-6 col-md-6">
+                <div class="header__top__right">
+                    <div class="header__top__right__social"><a href="#"> </a></div>
+                    <div class="header__top__right__auth" >
+                        <div class="row">
+                            <th:block th:if="${#strings.isEmpty(session.userNo) and  #strings.isEmpty(session.access_token_k)  and #strings.isEmpty(session.access_token_g)}"> <!-- 로그인 상태 X -->
+                            
+                            <a href="login" style="padding-right: 30px;"><i class="fa fa-user"></i> Login</a>
+                            <a href="signUp" style="padding-right: 30px;"><i class="fa fa-user"></i>Sign Up</a>					
+							</th:block>
+					
+							<th:block th:if="${not #strings.isEmpty(session.userNo) or not #strings.isEmpty(session.access_token_k) or not #strings.isEmpty(session.access_token_g)}"> <!-- 로그인 상태 O -->
+							<li id="sessionCounter" class="nav-item" style="margin-right: 20px;">
+								<span id="counter"></span> <!-- 로그인 남은 기간 -->
+							</li>
+							
+							<th:block th:if="${not #strings.isEmpty(session.userNo)}">
+	                            <a href="logout" style="padding-right: 30px;"><i class="fa fa-user"></i> Logout</a>
+							</th:block>
+							<th:block th:if="${not #strings.isEmpty(session.access_token_k)}">
+	                            <a href="kakao/logout" style="padding-right: 30px;"><i class="fa fa-user"></i> Logout</a>
+							</th:block>
+							<th:block th:if="${not #strings.isEmpty(session.access_token_g)}">
+	                            <a href="google/logout" style="padding-right: 30px;"><i class="fa fa-user"></i> Logout</a>
+							</th:block>
+	                            <a href="/userInfo"><i class="fa fa-user"></i> Mypage</a>
+						</th:block>
+	                        </div>
+	                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="header__logo">
+                        <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <nav class="header__menu">
+                        <ul>
+                            
+                            <li><a href="./shop-grid.html">술 한눈에 보기</a>
+                            	<ul class="header__menu__dropdown">
+                                    <li><a href="productdetail?product_no=1">소주</a></li>
+                                    <li><a href="productdetail?product_no=1">맥주</a></li>
+                                    <li><a href="./checkout.html">와인</a></li>
+                                    <li><a href="./blog-details.html">위스키</a></li>
+                                    <li><a href="./blog-details.html">보드카</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="/auction">경매</a></li>
+                            <li><a href="productdetail?product_no=1">커뮤니티</a>
+                            <ul class="header__menu__dropdown">
+                                    <li><a href="productdetail?product_no=1">이벤트</a></li>
+                                    <li><a href="productdetail?product_no=1">공지사항</a></li>
+                                </ul>
+                                </li>
+                            <li><a href="./contact.html">취향</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-3">
+                    <div class="header__cart">
+                        <ul>
+                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                            <li><a href="/cart"><i class="fa fa-shopping-bag"></i></a></li>
+                        </ul>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="humberger__open">
+                <i class="fa fa-bars"></i>
+            </div>
+        </div>
+    </header>
+    <!-- Header Section End -->
+    
+    <!-- Hero Section Begin -->
+    <section class="hero hero-normal">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="hero__categories">
+                        <div class="hero__categories__all">
+                            <i class="fa fa-bars"></i>
+                            <span>카테고리</span>
+                        </div>
+                        <ul class="hero__categories__list">
+                            <li><a href="#">소주</a></li>
+                            <li><a href="#">맥주</a></li>
+                            <li><a href="#">와인</a></li>
+                            <li><a href="#">브랜디&꼬냑</a></li>
+                            <li><a href="#">리큐르</a></li>
+                            <li><a href="#">중국술</a></li>
+                            <li><a href="#">일본술</a></li>
+                            <li><a href="#">데킬라</a></li>
+                            <li><a href="#">위스키</a></li>
+                            <li><a href="#">보드카</a></li>
+                            <li><a href="#">샴페인</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="hero__search">
+                        <div class="hero__search__form">
+                            <form action="#">
+                                
+                                <input type="text" placeholder="What do yo u need?">
+                                <button type="submit" class="site-btn">검색</button>
+                            </form>
+                        </div>
+                        <div class="hero__search__phone">
+                            
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Hero Section End -->
+
+</th:block>
+</html>

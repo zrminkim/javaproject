@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragmentsAdmin/layout}"> <!-- default layout 사용 -->
+      
+
+<!-- 페이지의 개별적인 css, js 설정 영역 -->
+<!-- thymeleaf layout dialect가 content페이지의 head태그를 layout의 head태그에 자동으로 추가해준다. -->
+    <title>술핑몰</title>
+
+<!-- 페이지의 실제 content 내용 -->
+
+<div layout:fragment="contentFragment">
+<main id="main" class="main">
+   <table>
+		<tr>
+			<th>주문번호</th>
+			<th>고객번호</th>
+			<th>주문총계</th>
+			<th>purchase_rec</th>
+			<th>주소(시/도)</th>
+			<th>주소(읍면동)</th>
+			<th>주소(신주소)</th>
+			<th>전화</th>
+			<th>이메일</th>
+			<th>req</th>
+			<th>배송상태</th>
+			<th>포인트</th>
+			<th>상태변경</th>
+		</tr>
+		<tr th:each="pur, status: ${purchases}" id="qnaInfo">
+			<td><div th:text="${pur.purchase_no}"></div><input type="hidden" id="pruchase_no" th:value="${pur.purchase_no}"
+			th:with="purNo=${pur.purchase_no}"/></td>
+			<td>[[${pur.user_num}]]</td>
+			<td>[[${pur.purchase_total}]]</td>
+			<td>[[${pur.purchase_rec}]]</td>
+			<td>[[${pur.purchase_zipcode}]]</td>
+			<td>[[${pur.purchase_addr1}]]</td>
+			<td>[[${pur.purchase_addr2}]]</td>
+			<td>[[${pur.purchase_tel}]]</td>
+			<td>[[${pur.purchase_email}]]</td>
+			<td>[[${pur.purchase_req}]]</td>
+			<td>[[${pur.purchase_progress}]]</td>
+			<td>[[${pur.purchase_upoint}]]</td>
+			<td>
+			<button type="button" name="btnProgress" th:value="${pur.purchase_no}">변경</button>
+			</td>
+		</tr>
+	</table>
+<nav aria-label="Page navigation example" >
+  <ul class="pagination justify-content-center">
+    <li class="page-item"><span th:if="${pageVo.startPage > 1}">
+        	<a class="page-link" th:href="@{'purchasemanager?page=1'}" th:text="'처음&emsp;'" th:style="${'text-decoration: none; color:black;'}" ></a>
+    	</span>
+    </li>
+    <li class="page-item">
+    	<span th:if="${pageVo.isPrev == true}">
+    		<a class="page-link" th:href="@{'purchasemanager?page='+${pageVo.startPage - 1}}" th:text="'이전'" th:style="${'text-decoration: none; color:black;'}"></a>
+    	</span>
+    </li>
+   <th:block  th:with="start = ${pageVo.startPage}, end = ${pageVo.endPage}">
+	    <li th:classappend="${pageNum == page ? 'page-item active' : 'page-item'}" th:with="start = ${pageVo.startPage}, end = ${pageVo.endPage}" th:each="pageNum : ${#numbers.sequence(start, end)}">
+	    		<a class="page-link" th:href="@{purchasemanager?(page=${pageNum})}" th:text="|&emsp;${pageNum}&emsp;|" th:style="${'text-decoration: none; color:black;'}"></a>
+	    </li>
+    </th:block>
+    <li class="page-item"> 
+    	<span th:if="${pageVo.isNext == true}">
+			<a class="page-link" th:href="@{'purchasemanager?page='+|${pageVo.endPage + 1}|}" th:text="'다음'" th:style="${'text-decoration: none; color:black;'}"></a>
+    	</span>
+    </li>
+    <li class="page-item">
+    	<span th:if="${pageVo.endPage < pageVo.totalPageCount}">
+			<a class="page-link" th:href="@{'purchasemanager?page='+${pageVo.totalPageCount}}" th:text="|&emsp;끝|" th:style="${'text-decoration: none; color:black;'}"></a>
+    	</span>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-light bg-light">
+  <div class="container-fluid justify-content-center">
+    <form class="d-flex" action="adminManagerPurchaseSearch" method="get">
+    	<select class="form-select" aria-label="Default select example" name="searchPurchase">
+  			<option value="purchase_no" th:checked="checked">주문번호</option>
+		</select>
+      <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search" name="searchValue">
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+</main>
+
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">x</span>
+    <p>배송 상태를 변경할까요?</p>
+    <button class="confirmUpdate">확인</button>
+  </div>
+</div>
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+ //주문관리 용 배송상태변경 업데이트 문 진행
+ 	let btnPno = "";
+ 	let uplinkPurchase = '/updatePurchaseProgress?purchase_no=';
+	
+	$("button[name=btnProgress]").on("click", function() {
+		btnPno = $(this).val();
+		  $(".modal").fadeIn();
+	});
+	  $(".confirmUpdate").click(function(){
+			location.href = uplinkPurchase + btnPno;
+		});
+		$(".close").click(function(){
+			$(".modal").fadeOut();
+		});
+/*]]>*/
+</script>
+</div>
+</html>

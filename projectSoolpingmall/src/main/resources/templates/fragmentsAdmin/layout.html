@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	th:with="lang=${#locale.language}" th:lang="${lang}">
+
+<!-- [head] 영역 -->
+<th:block th:replace="fragmentsAdmin/head :: headFragment"></th:block>
+
+<body>
+
+	<div id="page-container"> <!-- 푸터를 하단에 고정 시키기위한 div -->
+		<div id="content-wrap"> <!-- 푸터를 하단에 고정 시키기위한 div -->
+		<header th:replace="fragmentsAdmin/header :: navigationFragment"></header>
+			 <th:block th:replace="/fragmentsAdmin/sidebar :: sidebarFragment"></th:block>
+			<!-- [content] 영역 시작 -->
+			<div th:layout:fragment="contentFragment"></div>
+			<!-- [content] 영역 끝 -->
+			<!-- [footer] 영역 시작 -->
+			<th:block th:replace="fragmentsAdmin/footer :: footerFragment"></th:block>
+			<!-- [footer] 영역 끝 -->
+			
+		</div>
+	</div>
+
+</body>
+<!-- [body] 영역 끝 -->
+</html>

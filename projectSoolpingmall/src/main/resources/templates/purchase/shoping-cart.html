@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"> <!-- default layout 사용 -->
+      
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Ogani Template">
+    <meta name="keywords" content="Ogani, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+</head>
+<!-- 페이지의 개별적인 css, js 설정 영역 -->
+<!-- thymeleaf layout dialect가 content페이지의 head태그를 layout의 head태그에 자동으로 추가해준다. -->
+    <title>술핑몰</title>
+
+<!-- 페이지의 실제 content 내용 -->
+
+<div layout:fragment="contentFragment">
+
+    <!-- Hero Section Begin -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+            
+	<!-- Shoping Cart Section Begin -->
+ <section class="shoping-cart spad">
+ <form th:action="@{purchase}" method="post"  th:id="purchaseForm" enctype="multipart/form-data">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shoping__cart__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                   <th class="shoping__product" th:text="상품"></th>
+										<th th:text="가격"></th>
+										<th th:text="수량"></th>
+										<th th:text="금액"></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            	<th:block th:if="${#lists.isEmpty(cartProductList)}">
+                            	<tr>
+                            	<td>장바구니가 비어있습니다</td>
+                            	</tr>
+								</th:block>
+								<th:block th:unless="${#lists.isEmpty(cartProductList)}">
+								<tr th:each="product:${cartProductList}">
+								<th:block th:if="${cartProductList} != null">	
+                                    <td class="shoping__cart__item">
+                                        <input  type="hidden" th:value="${product.cart_no}" th:name="cart_no[]">
+											<img class="featured__item__pic set-bg" th:src="|@{/images/product/}${product.product_img}|">
+											[[${product.product_name}]]
+											<h5></h5>
+                                    </td>
+                                    </th:block>
+										<td class="shoping__cart__price" th:text="${product.product_price}" th:id="|product_price_${product.product_name}|">
+											<input type="hidden" th:name="product_price"
+											th:value="${product.product_price}" th:id="|product_price_${product.product_name}|">
+										</td>
+                                    <td class="shoping__cart__quantity">
+                                        <div class="quantity">
+                                            <div class="pro-qty">
+                                               <input type="number" min="1" th:value="${product.cart_cnt}" th:class="cart_cnt" 
+      													 th:data-product-name="${product.product_name}" name="cart_cnt[]">
+                                            </div>
+                                            	
+                                            	<!-- 수량 버튼 클릭시 상품 수량 변경과 금액, 총액 변경 -->
+                                            <script>
+                                            
+                                            $(document).ready(function() { 
+                                            	  $(".cart_cnt").change(function(){
+                                            	   var cnt = $(this).val();
+                                            	console.log(cnt)
+                                            	    var product_name = $(this).data("product-name");
+                                            	    var price = document.getElementById("product_price_" + product_name).innerText;
+                                            	    var total = cnt * price;
+                                            	    $("#total_" + product_name).text(total);
+                                            	    $("#total_" + product_name).val(total); 
+
+                                            	    var sum = 0;
+                                            	    $(".total").each(function(){
+                                            	      sum += Number($(this).text());
+                                            	    });
+                                            	    $("#sum").text(sum);
+                                            	    $("#sum").data("sum", sum)
+                                            	  });
+                                            	});
+											</script>
+                                        </div>
+                                    </td>
+                                    <td class="shoping__cart__total" th:text="${product.total}" th:id="|total_${product.product_name}|" th:class="total">
+											<input type="hidden" th:name="|total_${product.product_name}|"
+											th:value="${product.cart_cnt} * ${product.product_price}" th:id="total">
+										</td>
+                                    <td class="shoping__cart__item__close"  th:data-product-num="${product.product_num}">
+                                        <span class="icon_close" th:onclick="'confirmDelete(' + ${product.product_num} + ')'"></span>
+                                        <script>	// 상품 삭제 구현 ajax 스크립트
+                                        function confirmDelete(productNum) {
+                                        	console.log(productNum)
+                                            if (confirm("정말 삭제하시겠습니까?")) {
+                                                $.ajax({
+                                                	url: "/cartdelete?product_num=" + productNum,
+                                                    type: "get",
+                                                    success: function() {
+                                                        alert("상품이 삭제되었습니다.");
+                                                        location.reload();
+                                                    }, 
+                                                    error: function() {
+                                                        alert("상품 삭제에 실패했습니다.");
+                                                    }
+                                                });
+                                            }
+                                        }
+											</script>
+                                    </td> 
+                                </tr>
+                         	</th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shoping__cart__btns">
+                        <a href="home" class="primary-btn cart-btn" th:text="|쇼핑 계속하기|"></a>
+                        <a href="#" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading" th:text="|장바구니 업데이트|"></span>
+                            </a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="shoping__continue">
+                        <div class="shoping__discount">
+                            <h5>할인 쿠폰</h5>
+                            <form action="#">
+                                <input type="text" placeholder="Enter your coupon code">
+                                <button type="submit" class="site-btn">쿠폰 사용</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="shoping__checkout">
+                       <h5 th:text="합계"></h5>
+                        <ul>
+                            <li>총 금액 <span th:text="${totalSum}" th:id="sum" th:data-sum="${totalSum}"> 
+                            <input type="hidden" th:name="sum">	
+								</span>
+							</li>
+                           <li>사용 쿠폰 <span th:text="0" th:id="cupon"></span>
+                        </ul>
+                        <input type="submit" class="primary-btn" th:id="btnSubmit" th:value="주문하기">
+                        
+                        <!-- 결제하기 버튼 클릭시 장바구니가 비었는지 체크 후 confirm창 출력 -->
+							<script>
+							$(document).ready(function(){
+								$("#btnSubmit").click(function(event){
+									event.preventDefault();
+									
+									if($(".shoping__cart__item").length === 0){
+										alert("장바구니에 상품이 없습니다");
+									} else {
+										if(confirm("결제하시겠습니까?")){
+											$("#purchaseForm").submit();
+										}
+									}
+								});
+							});
+							</script>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </form>
+    </section>
+    <!-- Shoping Cart Section End -->
+
+
+
+
+
+
+            </div>
+        </div>
+    </section>
+    <!-- Blog Section End -->
+
+</div>
+</html>

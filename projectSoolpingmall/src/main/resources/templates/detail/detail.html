@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{fragments/layout}"> <!-- default layout 사용 -->
+
+
+<!-- 페이지의 개별적인 css, js 설정 영역 -->
+<!-- thymeleaf layout dialect가 content페이지의 head태그를 layout의 head태그에 자동으로 추가해준다. -->
+<title>술핑몰</title>
+
+<!-- 페이지의 실제 content 내용 -->
+
+
+
+<div layout:fragment="contentFragment">
+
+    <script>
+        $(document).ready(function () {
+            menuchange("btnReview"); // 상세페이지에서 처음에 열려있을 버튼
+
+            // 하트 버튼 누르면 버튼이 붉게 들어오며 찜하기 상태가 된다.
+            // DB로 user_num, product_num, regidate가 저장된다.
+            let check;
+            $(document).on("click", "#wishon", function () {
+                check = $("#wishon").val();
+                $.fn.wishchange(check);
+            });
+            $(document).on("click", "#wishoff", function () {
+                check = $("#wishoff").val();
+                $.fn.wishchange(check);
+            });
+            $.fn.wishchange = function (check) {
+                if (check == "false") {
+                    $('#unheart').attr('class', 'bi bi-heart-fill');
+                    $('#unheart').attr('id', 'heart');
+                    $('#wishoff').attr('id', 'wishon');
+                    $('#wishon').val(true);
+                    console.log(check + "찜하기")
+                    $.ajax({
+                        type: "GET", // GET, POST
+                        url: "wishInput", // 데이터를 전달할 url
+                        async: true, // 비동기화 동작 여부
+                        data: { product_no: $("#wishIn").val() }, // 전달할 데이터
+                        dataType: "html", // 전달받을 데이터 타입
+                        beforeSend: function (data) { // ajax 통신 시작 전
+                            alert("찜하기 완료!")
+                        },
+                        success: function () {
+
+                        },
+                        error: function () { // 에러 발생시
+
+                        },
+                        complete: function () { // ajax 통기 끝났을 때
+
+                        }
+                    })
+                }
+
+                // 하트 붉은 버튼 누르면 하트가 아무것도 들어있지 않은 상태가 되며 찜하기 상태가 해제 된다.
+                // DB에 저장된 자료가 자동으로 삭제된다.
+                if (check == "true") {
+                    $('#heart').attr('class', 'bi bi-heart');
+                    $('#heart').attr('id', 'unheart');
+                    $('#wishon').attr('id', 'wishoff');
+                    $('#wishoff').val(false);
+                    console.log(check + "찜해제")
+                    $.ajax({
+                        type: "GET", // GET, POST
+                        url: "wishOutput", // 데이터를 전달할 url
+                        async: true, // 비동기화 동작 여부
+                        data: { product_no: $("#wishIn").val() }, // 전달할 데이터
+                        dataType: "html", // 전달받을 데이터 타입
+                        beforeSend: function () { // ajax 통신 시작 전
+                            alert("찜하기 해제!")
+                        },
+                        success: function () {
+
+                        },
+                        error: function () { // 에러 발생시
+
+                        },
+                        complete: function () { // ajax 통기 끝났을 때
+
+                        }
+                    })
+                }
+            }
+
+            //리뷰에서 별점 기능 적용
+            // DB에서 review.reply_eval 값을 가져와서 별로 바꿔줌
+            let evals = document.getElementsByClassName('eval');
+            for (let i = 0; i < evals.length; i++) {
+                let eval = evals[i];
+                let value = eval.innerHTML.trim();
+
+                // 별점 표시하는 코드
+                let stars = '';
+                for (let j = 0; j < value; j++) {
+                    stars += '<img src="images/detail/star.png" class="stars_eval"></img>';
+                }
+                eval.innerHTML = stars;
+            }
+            // 리뷰 삭제 버튼
+            $("button[id='btnDeleteReview']").click(function () {
+                if (confirm("정말 삭제하시겠습니까?")) {
+                    var num = $(this).val();
+                    $.ajax({
+                        url: "delReview?reply_no=" + num,
+                        type: "get",
+                        async: true,
+                        data: { reply_no: num },
+                        error: function (request, status, error) {
+                            console.log("Code:" + request.status + " / Message:" + request.responseText + " / Error: " + error);
+                        },
+                        success: function (data) {
+                            console.log(data);
+                            $("#delReview").load(" #btnDeleteReview}")
+                            location.reload();
+
+                            console.log("리뷰 삭제 성공!");
+                        }
+                    });
+                }
+            });
+            $(".btnTog").on("click", function () {
+                $(".toggle-cont").toggle();
+            });
+        });
+        // 메뉴 탭 클릭시 동적으로 작동
+        function menuchange(contentId) {
+            document.querySelectorAll('div[id^="btnReview"], div[id^="btnReturnExchange"], div[id^="btnDetail"], div[id^="btnQna"]').forEach(div => {
+                div.style.display = "none";
+            });
+            document.getElementById(contentId).style.display = "block";
+        }
+
+    </script>
+
+    <!-- 상품 상세 정보 -->
+    <section class="breadcrumb-section set-bg" data-setbg="img/breadcrumb.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <th:block th:if="${#lists.size(datas)} > 0">
+                            <tr th:each="data:${datas}">
+                                <h4>[[${data.product_name}]]</h4>
+                                <div class="breadcrumb__option">
+                                    <span>[[${data.product_name_eng}]]</span>
+                                </div>
+                            </tr>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- 제품 상세보기 영역 -->
+    <section class="product-details spad">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <div class="product__details__pic">
+                        <div class="product__details__pic__item">
+                            <th:block th:if="${#lists.size(datas)} > 0">
+                                <tr th:each="data:${datas}">
+                                    <img class="product__details__pic__item--large"
+                                        th:src="|@{/images/product/}${data.product_img}|" alt=""><!--제품 상세보기 img-->
+                                </tr>
+                            </th:block>
+                        </div>
+                    </div>
+                </div>
+                <th:block th:if="${#lists.size(datas)} > 0">
+                    <tr th:each="data:${datas}">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="product__details__text">
+                                <h3>[[${data.product_name}]]</h3><!--상품 이름-->
+                                <h4>[[${data.product_name_eng}]]</h4><!--상품 영어 이름-->
+                                
+
+                                <form action="purchaseDirect" method="post">
+                                    <div class="product__details__price">[[${data.product_price}]] 원</div><!--상품 가격-->
+                                    <p>찾아주셔서 감사합니다!</p>
+                                    <div class="product__details__quantity">
+                                        <div class="quantity">
+                                            <div class="pro-qty">
+                                                <input type="number" value="1" min="1" name="cnt">
+                                                <input type="hidden" th:value="${datas.product_no}" id="wishIn"
+                                                    name="product_no">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="submit" class="primary-btn" value="결제하기">
+
+                                    <!-- 찜하기 되있는 상태 불러오기 -->
+                                    <th:block th:if="${wishcheck} == true">
+                                        <button type="button" id="wishon" th:value="${wishcheck}">
+                                            <i id="heart" class="bi bi-heart-fill"></i>
+                                        </button>
+                                    </th:block>
+                                    <!-- 찜하기 안되어 있는 상태 불러오기 -->
+                                    <th:block th:unless="${wishcheck} == true">
+                                        <button type="button" id="wishoff" th:value="${wishcheck}">
+                                            <i id="unheart" class="bi bi-heart"></i>
+                                        </button>
+                                    </th:block>
+                                </form>
+                                <ul>
+                                    <li><b>종류</b> <span>[[${data.product_type}]]</span></li>
+                                    <!--상품 종류(ex:소주,맥주,와인)-->
+                                    <li><b>용량</b> <span>[[${data.product_volume}]] ml</span></li><!--상품 용량-->
+                                    <li><b>알콜도수</b> <span>[[${data.product_level}]] 도</span></li><!--상품 알콜 도수-->
+                                    <li><b>원산지</b> <span>[[${data.product_cntr}]]</span></li><!--상품 원산지(생산국가)-->
+                                    <li><b>공유하기</b>
+                                        <div class="share">
+                                            <a href="javascript:shareFacebook()"><i class="bi bi-facebook"></i></a>
+                                            <a href="javascript:shareTwitter()"><i class="bi bi-twitter"></i></a>
+
+                                            <!--  공유하기 api 자바스크립트  -->
+                                            <script>
+                                                function shareTwitter() {
+                                                    var sendText = "[[${data.product_name}]]"; // 전달할 텍스트
+                                                    var sendUrl = "http://localhost/productdetail?product_no=[[${data.product_no}]]"; // 전달할 URL
+                                                    window.open("https://twitter.com/intent/tweet?text=" + sendText + "&url=" + sendUrl);
+                                                }
+
+                                                function shareFacebook() {
+                                                    var sendUrl = "https://log-laboratory.tistory.com/21"; // 전달할 URL
+                                                    window.open("http://www.facebook.com/sharer/sharer.php?u=" + sendUrl);
+                                                }
+                                            </script>
+
+                                            <!--  공유하기 api 자바스크립트 끝 -->
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </tr>
+                </th:block>
+                <div class="col-lg-12">
+                    <div class="product__details__tab">
+                        <!--메뉴 버튼 화면 동적 이동-->
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#" role="tab" aria-selected="true"
+                                    onclick="menuchange('btnDetail')">상세정보</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#" role="tab" aria-selected="false"
+                                    onclick="menuchange('btnReview')">리뷰</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#" role="tab" aria-selected="false"
+                                    onclick="menuchange('btnReturnExchange')">교환/반품정보</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#" role="tab" aria-selected="false"
+                                    onclick="menuchange('btnQna')">Q&amp;A</a>
+                            </li>
+                        </ul>
+                        <!--리뷰 페이지-->
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="btnReview" role="tabpanel">
+                                <div class="product__details__tab__desc">
+                                    <div th:if="${not #strings.isEmpty(reviews)}">
+                                        <div class="row mb-3">
+                                            <div class="col-md-1">작성자</div>
+                                            <div class="col-sm-2">평점</div>
+                                            <div class="col-sm-4">작성글</div>
+                                            <div class="col-sm-1">작성일</div>
+                                        </div>
+                                        <div th:each="review:${reviews}" class="row mb-3">
+                                            <div class="col-md-1" th:text="${review.user_name}"></div>
+                                            <div class="col-sm-2 eval" th:text="${review.reply_eval}">0</div>
+                                            <div class="col-sm-4">
+                                                <div id="editReview" th:text="${review.reply_comment}"></div>
+                                            </div>
+                                            <div class="col-sm-2" th:text="${review.reply_regdate}"></div>
+                                            <div class="col-sm-3">
+                                                <button type="button" class="btn btn-outline-dark flex-shrink-0"
+                                                    th:value="${review.reply_no}" id="btnDeleteReview">
+                                                    <i class="bi bi-trash"></i></button>
+                                            </div>
+                                        </div>
+
+
+                                        <!--리뷰 paging 처리-->
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination justify-content-center">
+                                                <li class="page-item"><span th:if="${pageVo.startPage > 1}">
+                                                        <a class="page-link" th:href="@{'productdetail?page={pageNum}'}"
+                                                            th:text="'처음&emsp;'"
+                                                            th:style="${'text-decoration: none; color:black;'}"></a>
+                                                    </span>
+                                                </li>
+                                                <li class="page-item">
+                                                    <span th:if="${pageVo.isPrev == true}">
+                                                        <a class="page-link"
+                                                            th:href="@{'productdetail?page='+${pageVo.startPage - 1}}"
+                                                            th:text="'이전'"
+                                                            th:style="${'text-decoration: none; color:black;'}"></a>
+                                                    </span>
+                                                </li>
+                                                <th:block
+                                                    th:with="start = ${pageVo.startPage}, end = ${pageVo.endPage}">
+                                                    <li th:classappend="${pageNum == page ? 'page-item active' : 'page-item'}"
+                                                        th:with="start = ${pageVo.startPage}, end = ${pageVo.endPage}"
+                                                        th:each="pageNum : ${#numbers.sequence(start, end)}">
+                                                        <a class="page-link"
+                                                            th:href="@{productdetail?(page=${pageNum},product_no=${datas.product_no})}"
+                                                            th:text="|&emsp;${pageNum}&emsp;|"
+                                                            th:style="${'text-decoration: none; color:black;'}"></a>
+                                                    </li>
+                                                </th:block>
+                                                <li class="page-item">
+                                                    <span th:if="${pageVo.isNext == true}">
+                                                        <a class="page-link"
+                                                            th:href="@{'productdetail?page='+|${pageVo.endPage + 1}|}"
+                                                            th:text="'다음'"
+                                                            th:style="${'text-decoration: none; color:black;'}"></a>
+                                                    </span>
+                                                </li>
+                                                <li class="page-item">
+                                                    <span th:if="${pageVo.endPage < pageVo.totalPageCount}">
+                                                        <a class="page-link"
+                                                            th:href="@{'productdetail?page='+${pageVo.totalPageCount}}"
+                                                            th:text="|&emsp;끝|"
+                                                            th:style="${'text-decoration: none; color:black;'}"></a>
+                                                    </span>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--교환,반품정보 화면-->
+                        <div class="tab-pane" id="btnReturnExchange" role="tabpanel">
+                            <div class="product__details__tab__desc">
+                                <h2>반품/교환정보</h2>
+
+                                <b>반품/교환 진행시 반드시 홈페이지에서 문의 주시거나, 전화로 연락을 주시기 바랍니다.</b><br /> <br />
+
+                                <b>반품 배송비 : </b> 3000원 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>교환배송비
+                                    : </b> 6000원(왕복)<br /> <br />배송비가 무료인 경우 6000원 부가<br /> <br /> -
+                                구매자 단순 변심으로 인한 요청은 7일이내에 가능합니다. (구매자 배송비 본인부담)<br /> <br /> -
+                                주문하신 상품이 표기 및 광고 내용이랑 다르거나, 계약 내용과 다르게 이행된 경우에는 공급받은 날 부터 3개월 이내,<br />
+                                그 사실을 알게 된 후 부터는 30일 이내에 가능합니다. (판매자 반품 및 배송비 부담)<br /><br />
+
+                                <h3>교환 및 반품이 불가능한 경우</h3><br />
+
+                                - 고객님의 책임 있는 사유로 상품분실 또는 라벨 훼손의 경우. 단, 상품의 내용을 확인하기 위해 겉 포장등을
+                                훼손한 경우는 제외<br /> <br /> - 코르크를 개봉하였거나 호일 또는 라벨이 훼손되어 상품가가 상실된 경우<br />
+                                <br /> - 고객님의 사용 또는 일부 소비에 의해 상품 가치가 상실된 경우<br /> <br /> - 시간의
+                                경과에 의해 재판매가 곤란할 정도로 상품 가치가 상실된 경우<br /> (자세한 내용은 고객센터 1:1 상담을
+                                이용해주시기 바랍니다.)<br /> <br /> ※ 고객님의 단순 변심으로 인한 교환, 반품을 하실 경우 상품반송
+                                비용은 고객님께서 부담하셔야 합니다.<br /> <br />
+                                <h3>서비스 문의 : 000-1111-2222</h3>
+                            </div>
+                        </div>
+                        <!-- 상세 정보 -->
+                        <div class="tab-pane" id="btnDetail" role="tabpanel">
+                            <div class="product__details__tab__desc">
+                                <th:block th:if="${#lists.size(datas)} > 0">
+                                    <tr th:each="data:${datas}">
+                                        <img th:src="|@{/images/product/}${data.product_img}|">
+                                        <h4>[[${data.product_name}]]</h4>
+                                        <span>[[${data.product_name_eng}]]</span><br />
+                                        <span>[[${data.product_price}]] 원</span><br />
+                                        <span>종류 : [[${data.product_type}]]</span><br />
+                                        <span>생산국가 : [[${data.product_cntr}]]</span><br />
+                                        <span>용량 : [[${data.product_volume}]] ml</span><br />
+                                        <span>도수 : [[${data.product_level}]] 도</span><br />
+
+                                    </tr>
+                                </th:block>
+                            </div>
+                        </div>
+                        <!-- QnA -->
+                        <div class="tab-pane" id="btnQna" role="tabpanel">
+                            <div class="nav nav-tabs">
+                                <div class="box">
+
+                                    <span id="tit">상품문의</span>
+                                    <button type="button" class="btn btn-outline-dark flex-shrink-0"
+                                        onclick="location.href = '/boardinsert'">문의하기</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+</div>
+
+</html>

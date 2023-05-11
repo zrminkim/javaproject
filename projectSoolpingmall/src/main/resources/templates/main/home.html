@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"> <!-- default layout 사용 -->
+      
+
+<!-- 페이지의 개별적인 css, js 설정 영역 -->
+<!-- thymeleaf layout dialect가 content페이지의 head태그를 layout의 head태그에 자동으로 추가해준다. -->
+    <title>술핑몰</title>
+
+<!-- 페이지의 실제 content 내용 -->
+
+<div layout:fragment="contentFragment">
+    
+
+    <!-- Categories Section Begin -->
+    <section class="categories">
+        <div class="container">
+            <div class="row">
+                <div class="categories__slider owl-carousel">
+                    <div class="col-lg-3" th:each="product : ${products}">
+                        <div class="categories__item set-bg" th:data-setbg="@{/images/product/__${product.product_img}__}">
+                            <h5><a href="#" th:text="${product.product_name}"></a></h5>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Categories Section End -->
+
+    <!-- Featured Section Begin -->
+    <section class="featured spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <h2>이달의 추천 술</h2>
+                    </div>
+                    <div class="featured__controls">
+                        <ul>
+                            <li class="active" data-filter="*">모든 술</li>
+                            <li data-filter=".oranges">가장많이 찾는 술</li>
+                            <li data-filter=".fresh-meat">새롭게 만나는 술</li>
+                            <li data-filter=".vegetables">선물하기 좋은 술</li>
+                            <li data-filter=".fastfood">술핑몰이 추천하는 술</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- MixItUp JS는 HTML 요소의 필터링, 정렬 및 레이아웃 변경을 수행하는 JavaScript 라이브러리입니다.
+             이 라이브러리는 사용자 정의 필터링, 정렬 및 레이아웃을 구현할 수 있도록 유연하고 강력한 API를 제공합니다. -->
+             <!-- MixItUp의 필터링 기능을 사용 하였습니다 -->
+            
+            <div class="row featured__filter">
+                <div class="col-lg-3 col-md-4 col-sm-6 mix oranges" th:each="product : ${products}">
+                    <div class="featured__item">
+                        <div class="featured__item__pic set-bg" th:data-setbg="@{/images/product/__${product.product_img}__}">
+                            <ul class="featured__item__pic__hover">
+                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                <li><a th:href="@{/productdetail(product_no=${product.product_no})}"><i class="fa fa-external-link"></i></a></li>
+                                <li><a th:href="@{'addCart?product_num='+|${product.product_no}|+'&cart_cnt=1'}"><i class="fa fa-shopping-cart"></i></a></li> 
+                            </ul>
+                        </div>
+                        <div class="featured__item__text">
+                            <h6><a href="#" th:text="${product.product_name}"></a></h6>
+				            <h5 th:text="${product.product_price}+'원'"></h5>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="col-lg-3 col-md-4 col-sm-6 mix fresh-meat" th:each="product1 : ${products1}">
+                    <div class="featured__item">
+                        <div class="featured__item__pic set-bg" th:data-setbg="@{/images/product/__${product1.product_img}__}">
+                            <ul class="featured__item__pic__hover">
+                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                <li><a th:href="@{/productdetail(product_no=${product1.product_no})}"><i class="fa fa-external-link"></i></a></li>
+                                <li><a href="cart"><i class="fa fa-shopping-cart"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="featured__item__text">
+                            <h6><a href="#" th:text="${product1.product_name}"></a></h6>
+				            <h5 th:text="${product1.product_price}+'원'"></h5>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-4 col-sm-6 mix vegetables" th:each="product2 : ${products2}">
+                    <div class="featured__item">
+                        <div class="featured__item__pic set-bg" th:data-setbg="@{/images/product/__${product2.product_img}__}">
+                            <ul class="featured__item__pic__hover">
+                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                <li><a th:href="@{/productdetail(product_no=${product2.product_no})}"><i class="fa fa-external-link"></i></a></li>
+                                <li><a href="cart"><i class="fa fa-shopping-cart"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="featured__item__text">
+                            <h6><a href="#" th:text="${product2.product_name}"></a></h6>
+				            <h5 th:text="${product2.product_price}+'원'"></h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 mix fastfood" th:each="product3 : ${products3}">
+                    <div class="featured__item">
+                        <div class="featured__item__pic set-bg" th:data-setbg="@{/images/product/__${product3.product_img}__}">
+                            <ul class="featured__item__pic__hover">
+                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                <li><a th:href="@{/productdetail(product_no=${product3.product_no})}"><i class="fa fa-external-link"></i></a></li>
+                                <li><a href="cart"><i class="fa fa-shopping-cart"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="featured__item__text">
+                            <h6><a href="#" th:text="${product3.product_name}"></a></h6>
+				            <h5 th:text="${product3.product_price}+'원'"></h5>
+                        </div>
+                    </div>
+                </div>
+                
+                
+            </div>
+        </div>
+    </section>
+    <!-- Featured Section End -->
+
+  
+
+
+</div>
+</html>

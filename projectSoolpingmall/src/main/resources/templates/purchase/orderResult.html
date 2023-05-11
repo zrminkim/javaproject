@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/layout}">
+<!-- default layout 사용 -->
+
+
+<!-- 페이지의 개별적인 css, js 설정 영역 -->
+<!-- thymeleaf layout dialect가 content페이지의 head태그를 layout의 head태그에 자동으로 추가해준다. -->
+<title>술핑몰</title>
+
+<!-- 페이지의 실제 content 내용 -->
+
+<div layout:fragment="contentFragment">
+
+	<!-- Hero Section Begin -->
+	<section class="hero">
+		<div class="container">
+			<div class="row">
+
+				
+				<div class="container mt-5 mb-5" >
+					<div class="row d-flex justify-content-center">
+						<div class="col-md-8">
+							<div class="card">
+								<div class="text-left logo p-2 px-5">
+									<img src="img/logo.png" width="200">
+								</div>
+								<div class="invoice p-5">
+									<h5 class="display-4 font-weight-bold">주문 확인</h5>
+									<span class="font-weight-bold d-block mt-4">ㅇㅇㅇ 님</span>
+									<span>상품 배송에는 2~3일이 소요될 예정입니다</span>
+									<div
+										class="payment border-top mt-3 mb-3 border-bottom table-responsive">
+
+										<table class="table table-borderless">
+												
+											<tbody>
+												<tr>
+													<td>
+														<div class="py-2">
+															<span class="d-block text-muted" th:text="주문일"></span> <span th:text="|${plist[0].productl_regdate}|"></span>
+														</div>
+													</td>
+													<td>
+														<div class="py-2">
+															<span class="d-block text-muted">주문번호</span> <span th:text="${plist2[0].purchase_orderno}"></span>
+														</div>
+													</td>
+													<td>
+														<div class="py-2">
+															<span class="d-block text-muted">전화번호</span> <span th:text="${plist2[0].purchase_tel}"></span>
+
+														</div>
+													</td>
+
+													<td>
+														<div class="py-2">
+
+															<span class="d-block text-muted">배송지 주소</span> <span th:text="${plist2[0].purchase_addr1} + ${plist2[0].purchase_addr2}"></span>
+
+														</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									<div class="product border-bottom table-responsive">
+										<table class="table table-borderless" th:each="purchase : ${plist}">
+											<tbody>
+												<tr>
+													<td width="20%"><img
+														th:src="@{/images/product/} + ${purchase.product_img}" width="90"></td>
+
+													<td width="60%"><span class="font-weight-bold" th:text="${purchase.product_name}"></span>
+														<div class="product-qty">
+														<th:block th:switch="${path}">
+															<span class="d-block" th:case="b" th:text="|수량 : ${purchase.product_cnt}|"></span> <span></span>
+															<span class="d-block" th:case="a" th:text="|수량 : ${cnt}|"></span> <span></span>
+														</th:block>
+
+														</div></td>
+													<td width="20%">
+														<div class="text-right">
+															<span class="font-weight-bold" th:text="|${purchase.product_price * purchase.product_cnt}|"></span>
+														</div>
+													</td>
+												</tr>
+
+											
+											</tbody>
+										</table>
+									</div>
+
+									<div class="row d-flex justify-content-end">
+										<div class="col-md-5">
+											<table class="table table-borderless">
+												<tbody class="totals">
+													<tr>
+														<td>
+															<div class="text-left">
+																<span class="text-muted">상품 총 가격</span>
+															</div>
+														</td>
+														<td>
+															<div class="text-right">
+																<span  th:text="${purchase_total + user_cash_used + user_point_used}"></span>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<div class="text-left">
+																<span class="text-muted">배송비</span>
+															</div>
+														</td>
+														<td>
+															<div class="text-right">
+																<span>3000</span>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<div class="text-left">
+																<span class="text-muted">사용 캐쉬</span>
+															</div>
+														</td>
+														
+														<td>
+															<div class="text-right">
+																<span class="text-success" th:text="|- ${user_cash_used}"></span>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<div class="text-left">
+																<span class="text-muted">사용 포인트</span>
+															</div>
+														</td>
+														
+														<td>
+															<div class="text-right">
+																<span class="text-success" th:text="|- ${user_point_used}"></span>
+															</div>
+														</td>
+													</tr>
+
+
+													<tr class="border-top border-bottom">
+														<td>
+															<div class="text-left">
+
+																<span class="font-weight-bold">총 결제금액</span>
+
+															</div>
+														</td>
+														<td>
+															<div class="text-right">
+																<span class="font-weight-bold" th:text="${purchase_total}"></span>
+															</div>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+
+									<p></p>
+									<p class="font-weight-bold mb-0">구매해주셔서 감사합니다!</p>
+									<span>술핑몰</span>
+
+								</div>
+
+
+								<div class="d-flex justify-content-between footer p-3">
+
+									<span>문의사항이 있으신가요? <a href="#">QnA</a></span>
+									<span>
+									<a th:href="@{/}"><span class="primary-btn">메인으로</span></a>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<th:block>
+
+
+
+
+			</div>
+		</div>
+	</section>
+	<!-- Blog Section End -->
+
+</div>
+</html>

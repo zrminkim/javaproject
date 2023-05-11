@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="html-head">
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>술핑몰 관리자</title>
+
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+	rel="stylesheet" />
+<!-- Core theme CSS (includes Bootstrap)-->
+<link href="/css/styles.css" rel="stylesheet" />
+<link href="/css/admin/admin.css" rel="stylesheet" />
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+</head>
+<body>
+	<div class="container">
+	
+	</div>
+<script type="text/javascript">
+window.onload = function() {
+	  let product_name = document.getElementById('product_name');
+	  let product_nameDiv = document.getElementById("product_nameDiv");
+	  
+	  let product_name_eng = document.getElementById('product_name_eng');
+	  let product_name_engDiv = document.getElementById("product_name_engDiv");
+	  
+	  let product_img_url = document.getElementById('product_img_url');
+	  let product_img_urlDiv = document.getElementById("product_img_urlDiv");
+	  
+	  let product_price = document.getElementById('product_price');
+	  let product_priceDiv = document.getElementById("product_priceDiv");
+	  
+	  let product_volume = document.getElementById('product_volume');
+	  let product_volumeDiv = document.getElementById("product_volumeDiv");
+	  
+	  let product_stock = document.getElementById('product_stock');
+	  let product_stockDiv = document.getElementById("product_stockDiv");
+	  
+	  let product_level = document.getElementById('product_level');
+	  let product_levelDiv = document.getElementById("product_levelDiv");
+	  
+	  let product_img = document.getElementById('product_img');
+	  let product_imgDiv = document.getElementById("product_imgDiv");
+	  
+	  let product_type = document.getElementById('product_type');
+	  let product_typeDiv = document.getElementById("product_typeDiv");
+	  
+	  let product_cntr = document.getElementById('product_cntr');
+	  let product_cntrDiv = document.getElementById("product_cntrDiv");
+	  
+	  let msgDiv = document.getElementById("msgDiv");
+	  let check = /^[0-9]+$/;
+	  let engCheck = /^[a-zA-Z]*$/; 
+	// 상품명 입력
+	  product_name.onblur = function() {
+	    if (product_name.value === "") {
+	    	product_nameDiv.innerText = "상품명을 입력하세요";
+	    	product_name.focus();
+	      product_name.setAttribute('required', '');
+	    } else {
+	    	product_name.removeAttribute('required', '');
+	    }
+	  }
+	  product_nameInput();
+	///////////////////////////////////
+	  // 상품명(영문) 입력
+	  product_name_eng.onblur = function() {
+	    if (product_name_eng.value === "") {
+	    	product_name_engDiv.innerText = "상품명(영문)을 입력하세요";
+	    	product_name_eng.focus();
+	      	product_name_eng.setAttribute('required', '');
+	    }else if(!engCheck.test(product_name_eng.value)) {
+	    	product_name_engDiv.innerText = "상품명을 영문으로 입력하세요";
+	    	product_name_eng.focus();
+	    	product_name_eng.setAttribute('required', '');
+	    }else {
+	    	product_name_eng.removeAttribute('required', '');
+	    }
+	  }
+	  product_name_engInput();
+
+	// 상품이미지 입력
+	  product_img.onblur = function() {
+	    if (product_img.value === "") {
+	    	product_imgDiv.innerText = "업로드 할 이미지를 선택하세요";
+	    	product_img.focus();
+	    	product_img.setAttribute('required', '');
+	    } else {
+	    	product_img.removeAttribute('required', '');
+	    }
+	  }
+	  product_imgInput();
+	  
+	//상품이미지url 입력
+	  product_img_url.onblur = function() {
+		    if (product_img_url.value === "") {
+		    	product_img_urlDiv.innerText = "이미지(url)을 입력하세요";
+		    	product_img_url.focus();
+		    	product_img_url.setAttribute('required', '');
+		    } else {
+		    	product_img_url.removeAttribute('required', '');
+		    }
+		  }
+	  product_img_urlInput();
+	  
+	  //상품가격 입력
+	   product_price.onblur = function() {
+		    if (product_price.value === "") {
+		    	product_priceDiv.innerText = "상품가격을 입력하세요";
+		    	product_price.focus();
+		    	product_price.setAttribute('required', '');
+		    }else if(!check.test(product_price.value)) {
+		    	product_priceDiv.innerText = "상품가격은 숫자형식으로 입력하세요";
+		    	product_price.focus();
+		    	product_price.setAttribute('required', '');
+		    }
+		    else {
+		    	product_price.removeAttribute('required', '');
+		    } 
+		    
+		  }
+	   product_priceInput();
+	  
+	   //상품 용량 입력
+	   product_volume.onblur = function() {
+		    if (product_volume.value === "") {
+		    	product_volumeDiv.innerText = "상품용량을 입력하세요";
+		    	product_volume.focus();
+		    	product_volume.setAttribute('required', '');
+		    }else if(!check.test(product_volume.value)) {
+		    	product_volumeDiv.innerText = "상품용량은 숫자형식으로 입력하세요";
+		    	product_volume.focus();
+		    	product_volume.setAttribute('required', '');
+		    } else {
+		    	product_volume.removeAttribute('required', '');
+		    }
+		  }
+	   product_volumeInput();
+	  
+	   //상품 재고 입력
+	   product_stock.onblur = function() {
+		    if (product_stock.value === "") {
+		    	product_stockDiv.innerText = "상품재고를 입력하세요";
+		    	product_stock.focus();
+		    	product_stock.setAttribute('required', '');
+		    }else if(!check.test(product_stock.value)) {
+		    	product_stockDiv.innerText = "상품재고는 숫자형식으로 입력하세요";
+		    	product_stock.focus();
+		    	product_stock.setAttribute('required', '');
+		    } else {
+		    	product_stock.removeAttribute('required', '');
+		    }
+		  }
+	   product_stockInput();
+	  
+	   //상품 등급 입력
+	   product_level.onblur = function() {
+		    if (product_level.value === "") {
+		    	product_levelDiv.innerText = "상품등급을 입력하세요";
+		    	product_level.focus();
+		    	product_level.setAttribute('required', '');
+		    }else if(!check.test(product_level.value)) {
+		    	product_levelDiv.innerText = "상품등급은 숫자형식으로 입력하세요";
+		    	product_level.focus();
+		    	product_level.setAttribute('required', '');
+		    }  else {
+		    	product_level.removeAttribute('required', '');
+		    }
+		  }
+	   product_levelInput();
+	   
+	   //상품 종류 입력
+	   product_type.onblur = function() {
+		    if (product_type.value === "") {
+		    	product_typeDiv.innerText = "주류 종류를하세요";
+		    	product_type.focus();
+		    	product_type.setAttribute('required', '');
+		    } else {
+		    	product_type.removeAttribute('required', '');
+		    }
+		  }
+	   product_typeInput();
+	   
+	 //상품 나라 입력
+	   product_cntr.onblur = function() {
+		    if (product_cntr.value === "") {
+		    	product_cntrDiv.innerText = "나라를 입력하세요";
+		    	product_cntr.focus();
+		    	product_cntr.setAttribute('required', '');
+		    } else {
+		    	product_cntr.removeAttribute('required', '');
+		    }
+		  }
+	   product_cntrInput();
+	  //
+	  
+	  document.getElementById('btnSubmit').onclick = function(){
+		  if(product_name.value === "" || product_name_eng.value === "" 
+			  || product_img_url.value === "" || product_price.value === ""
+				  || product_volume.value === "" || product_stock.value === ""
+					  || product_level.value === "" || product_img.value === "" || product_type.value === "" ||
+					  product_cntr.value === "" && !check.test(product_price) && !check.test(product_volume) && !check.test(product_price)
+					  && !check.test(product_stock) && !check.test(product_level)){
+			  if (product_name.value === "") {
+			    	product_nameDiv.innerText = "상품명을 입력하세요";
+			    	product_name.focus();
+			      product_name.setAttribute('required', '');
+			    } else {
+			    	product_name.removeAttribute('required', '');
+			    }
+			  product_nameInput();
+			  
+			  if (product_name_eng.value === "") {
+			    	product_name_engDiv.innerText = "상품명(영문)을 입력하세요";
+			    	product_name_eng.focus();
+			      	product_name_eng.setAttribute('required', '');
+			    } else {
+			    	product_name_eng.removeAttribute('required', '');
+			    }
+			  product_name_engInput();
+			  
+			  if (!product_img.value) {
+			    	product_imgDiv.innerText = "상품이미지를 업로드하세요";
+			    	product_img.focus();
+			    	product_img.setAttribute('required', '');
+			    } else {
+			    	product_img.removeAttribute('required', '');
+			    }
+			  
+			  product_imgInput();
+			  
+			  if (product_img_url.value === "") {
+			    	product_img_urlDiv.innerText = "이미지(url)을 입력하세요";
+			    	product_img_url.focus();
+			    	product_img_url.setAttribute('required', '');
+			    } else {
+			    	product_img_url.removeAttribute('required', '');
+			    }
+			  
+		  		product_img_urlInput();
+		  		
+		  		if (product_price.value === "") {
+			    	product_priceDiv.innerText = "상품가격을 입력하세요";
+			    	product_price.focus();
+			    	product_price.setAttribute('required', '');
+			    } else {
+			    	product_price.removeAttribute('required', '');
+			    }
+		   		product_priceInput();
+	
+		   	 	if (product_volume.value === "") {
+			    	product_volumeDiv.innerText = "상품용량을 입력하세요";
+			    	product_volume.focus();
+			    	product_volume.setAttribute('required', '');
+			    } else {
+			    	product_volume.removeAttribute('required', '');
+			    }
+			  
+		   		product_volumeInput();
+		   		
+		   		if (product_stock.value === "") {
+			    	product_stockDiv.innerText = "상품재고를 입력하세요";
+			    	product_stock.focus();
+			    	product_stock.setAttribute('required', '');
+			    } else {
+			    	product_stock.removeAttribute('required', '');
+			    }
+		  		product_stockInput();
+		  		
+		  		 if (product_level.value === "") {
+				    	product_levelDiv.innerText = "상품등급을 입력하세요";
+				    	product_level.focus();
+				    	product_level.setAttribute('required', '');
+				    } else {
+				    	product_level.removeAttribute('required', '');
+				    }
+			   product_levelInput();
+			   
+			   if (!product_type.value) {
+			    	product_typeDiv.innerText = "종류를 입력하세요";
+			    	product_type.focus();
+			    	product_type.setAttribute('required', '');
+			    } else {
+			    	product_type.removeAttribute('required', '');
+			    }
+			   
+		   product_typeInput();
+		   
+		   if (!product_cntr.value) {
+			   product_cntrDiv.innerText = "나라를 입력하세요";
+			   product_cntr.focus();
+			   product_cntr.setAttribute('required', '');
+		    } else {
+		    	product_cntr.removeAttribute('required', '');
+		    }
+		   product_cntrInput();
+		  }
+		  else{
+			  //frmProduct.submit;
+			  $(".modal").fadeIn();
+		  }	
+	  }
+	$(".confirmUpdate").click(function(){
+		$("#frmProduct").attr("action","update").submit();
+	});
+	$(".close").click(function(){
+		$(".modal").fadeOut();
+	});
+}
+function product_nameInput(){
+	product_name.oninput = function(){
+		product_nameDiv.innerText = "";
+		msgDiv.innerText = "";
+	}
+}
+function product_name_engInput(){
+	product_name_eng.oninput = function(){
+		product_name_engDiv.innerText = "";
+		msgDiv.innerText = "";
+	}
+}
+function product_img_urlInput(){
+	product_img_url.oninput = function(){
+		product_img_urlDiv.innerText = "";
+		msgDiv.innerText = "";
+	}
+}
+function product_priceInput(){
+	product_price.oninput = function(){
+		product_priceDiv.innerText = "";
+		msgDiv.innerText = "";
+	}
+}
+function product_volumeInput(){
+	product_volume.oninput = function(){
+		product_volumeDiv.innerText = "";
+		msgDiv.innerText = "";
+	}
+}
+function product_stockInput(){
+	product_stock.oninput = function(){
+		product_stockDiv.innerText = "";
+		msgDiv.innerText = "";
+	}
+}
+function product_levelInput(){
+	product_level.oninput = function(){
+		product_levelDiv.innerText = "";
+		msgDiv.innerText = "";
+	}
+}
+function product_imgInput(){
+	product_img.oninput = function(){
+		product_imgDiv.innerText = "";
+		msgDiv.innerText = "";
+	}
+}
+function product_typeInput(){
+	product_type.oninput = function(){
+		product_typeDiv.innerText = "";
+		msgDiv.innerText = "";
+	}
+}
+function product_cntrInput(){
+	product_cntr.oninput = function(){
+		product_cntrDiv.innerText = "";
+		msgDiv.innerText = "";
+	}
+}
+</script>
+</head>
+<body>
+<div class="login-page">
+  <div class="login-content login-content-signin">
+    <div>
+      <h2>상품수정</h2>
+      <form class="wrapper-box"  id="frmProduct" method="post" enctype="multipart/form-data" th:object="${product}">
+        <div th:text="${product.product_no}"></div>
+        <input type="hidden" name="product_no" th:value="${product.product_no}">
+
+        <input type="text" name="product_name" id="product_name" placeholder="상품명을 입력하세요" th:value="${product.product_name}"/>
+        <div id="product_nameDiv" class="error-message"></div>
+        
+        <input type="text" name="product_name_eng" id="product_name_eng" placeholder="상품명(영문)을 입력하세요" th:value="${product.product_name_eng}"/>
+        <div id="product_name_engDiv" class="error-message"></div>
+        
+        <input type="file" name="uploadfile" id="product_img" placeholder="업로드할 이미지를 선택하세요" />
+        <div id="product_imgDiv" class="error-message"></div>
+        
+        <input type="text" name="product_img_url" id="product_img_url" placeholder="이미지(url)을 입력하세요" th:value="${product.product_img_url}"/>
+        <div id="product_img_urlDiv" class="error-message"></div>
+        
+        <input type="text" name="product_price" id="product_price" placeholder="가격을 입력하세요" th:value="${product.product_price}"/>
+        <div id="product_priceDiv" class="error-message"></div><br/>
+         
+        <select  name="product_type" id="product_type" th:value="${product.product_type}">
+            <option value="">주류 종류를 선택하십시오</option>
+            <option value="와인" >와인</option>
+            <option value="브랜디">브랜디</option>
+            <option value="증류주">증류주</option>
+         </select>
+         <div id="product_typeDiv" class="error-message"></div>
+          
+        <select  name="product_cntr" id="product_cntr" th:value="${product.product_cntr}">
+            <option value="">나라를 선택하십시오</option>
+            <option value="영국">영국</option>
+            <option value="프랑스">프랑스</option>
+            <option value="한국">한국</option>
+            <option value="일본">일본</option>
+         </select>
+         <div id="product_cntrDiv" class="error-message"></div>
+         
+         <input type="text" name="product_volume" id="product_volume" placeholder="용량을 입력하세요" th:value="${product.product_volume}"/>
+         <div id="product_volumeDiv" class="error-message"></div>
+         
+         <input type="text" name="product_stock" id="product_stock" placeholder="재고를 입력하세요" th:value="${product.product_stock}"/>
+         <div id="product_stockDiv" class="error-message"></div>
+         
+         <input type="text" name="product_level" id="product_level" placeholder="등급을 입력하세요" th:value="${product.product_level}"/>
+         <div id="product_levelDiv" class="error-message"></div>
+        <div th:text="${msg}" id="msgDiv"></div>
+      </form>
+        <button id="btnSubmit" th:text="수정하기"></button>
+        <button id="btnBack" onclick="history.back()" th:text="뒤로가기"></button>
+    </div>
+  </div>
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">x</span>
+    <p class="p">정말 수정할까요?</p>
+    <button class="confirmUpdate">확인</button>
+  </div>
+</div>
+</div>
+</body>
+</html>

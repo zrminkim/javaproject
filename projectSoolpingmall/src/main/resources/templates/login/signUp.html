@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lnag="ko">
+    <head>
+        <meta charset="UTF-8">
+        <title>술핑몰</title>
+        <!-- jquery (jquery가 부트스트랩보다 위에)  -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-latest.js"></script>
+<!-- CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<!-- 테마 -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<!-- 자바스크립트 -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<!-- Bootstrap CSS -->
+        <style>
+        	/* 레이아웃 틀 */
+html {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    height: 100%;
+    background: #f5f6f7;
+    font-family: Dotum,'돋움',Helvetica,sans-serif;
+}
+#logo {
+    width: 240px;
+    height: 44px;
+    cursor: pointer;
+}
+
+#header {
+    padding-top: 62px;
+    padding-bottom: 20px;
+    text-align: center;
+}
+#wrapper {
+    position: relative;
+    height: 100%;
+}
+
+#content {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    width: 460px;
+}
+
+
+
+
+/* 입력폼 */
+
+
+h3 {
+    margin: 19px 0 8px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+.box {
+    display: block;
+    width: 100%;
+    height: 51px;
+    border: solid 1px #dadada;
+    padding: 10px 14px 10px 14px;
+    box-sizing: border-box;
+    background: #fff;
+    position: relative;
+    text-align: center;
+}
+
+.int {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 29px;
+    border: none;
+    background: #fff;
+    font-size: 15px;
+}
+
+
+
+input {
+    font-family: Dotum,'돋움',Helvetica,sans-serif;    
+}
+
+.short{ /*id, 우편변호 div */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.box.int_id { /* 입력창*/
+    text-align: center;
+    width:70%;
+}
+
+.btnshort{
+    text-align: center;
+    margin-right: 7px;
+    margin-top: 7px;;
+
+}
+
+.box.int_pass {
+    padding-right: 40px;
+}
+
+.box.int_pass_check {
+    padding-right: 40px;
+}
+
+.step_url {
+    /*@naver.com*/
+    position: absolute;
+    top: 16px;
+    right: 13px;
+    font-size: 15px;
+    color: #8e8e8e;
+}
+
+.pswdImg {
+    width: 18px;
+    height: 20px;
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    margin-top: -10px;
+    cursor: pointer;
+}
+
+#bir_wrap {
+    display: table;
+    width: 100%;
+}
+
+#bir_yy {
+    display: table-cell;
+    width: 147px;
+    
+}
+
+#bir_mm {
+    display: table-cell;
+    width: 147px;
+    vertical-align: middle;
+}
+
+#bir_dd {
+    display: table-cell;
+    width: 147px;
+}
+
+#bir_mm, #bir_dd {
+    padding-left: 10px;
+}
+
+select {
+    width: 100%;
+    height: 29px;
+    font-size: 15px;
+    background: #fff url(https://static.nid.naver.com/images/join/pc/sel_arr_2x.gif) 100% 50% no-repeat;
+    background-size: 20px 8px;
+    -webkit-appearance: none;
+    display: inline-block;
+    text-align: start;
+    border: none;
+    cursor: default;
+    font-family: Dotum,'돋움',Helvetica,sans-serif;
+}
+
+/* 에러메세지 */
+
+.error_next_box {
+    margin-top: 9px;
+    font-size: 12px;
+    color: red;    
+    display: none;
+}
+
+#alertTxt {
+    position: absolute;
+    top: 19px;
+    right: 38px;
+    font-size: 12px;
+    color: red;
+    display: none;
+}
+
+/* 버튼 */
+
+.btn_area {
+    margin: 30px 0 91px;
+    justify-content: center;
+    text-align: center;
+}
+
+
+
+
+/* 가입버튼 */
+.myButton {
+	background-color:#b8e356;
+	border-radius:28px;
+	border:1px solid #83c41a;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:17px;
+	font-weight:bold;
+	padding:16px 76px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #86ae47;
+}
+.myButton:hover {
+	background-color:#a5cc52;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
+
+/*버튼*/
+.btnshort {
+	box-shadow: 0px 10px 14px -7px #3e7327;
+	background:linear-gradient(to bottom, #77b55a 5%, #72b352 100%);
+	background-color:#77b55a;
+	border-radius:4px;
+	border:1px solid #4b8f29;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:11px;
+	padding:8px 12px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #5b8a3c;
+}
+.btnshort:hover {
+	background:linear-gradient(to bottom, #72b352 5%, #77b55a 100%);
+	background-color:#72b352;
+}
+.btnshort:active {
+	position:relative;
+	top:1px;
+}
+
+        
+
+
+        </style>
+        
+    </head>
+    <body>
+        <!-- header -->
+        <div id="header">
+            <h2>Registration</h2>
+        </div>
+
+
+
+
+
+        <!-- 모달 -->
+
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="myModalLabel"></h5>
+        </div>
+        <div class="modal-body">
+          <!-- checkInput에서 입력형식 검사 후 탈락 시 여기에 적합한 메시지를 넣어서 모달창 띄움 -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btnHome">메인으로</button>
+          <button type="button" class="btn btn-primary" id="btnRetry" data-bs-dismiss="modal">다시 시도</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  
+
+        <!-- wrapper -->
+        <div id="wrapper">
+
+            <!-- content-->
+            <div id="content">
+                <form action="/signUp" method="post" id="frm">
+                    <!--name-->
+                    <div>
+                        <h3 class="join_title">
+                            <label for="user_name">Name</label>
+                        </h3>
+                        <span class="box int_mobile">
+                            <input type="text" id="user_name" name="user_name" class="int" placeholder="성명" maxlength="20">
+                        </span>
+                        <span class="error_next_box"></span>
+                        
+                    </div>
+                    <!-- ID -->
+                    <h3 class="join_title">
+                        <label for="user_id">ID</label>
+                    </h3>
+                    <div class="short">
+                        <span class="box int_id">
+                            <input type="text" id="user_id" name="user_id" class="int"  placeholder="영문,숫자 조합 5글자 이상">
+                        </span>
+                        <span>
+                            <input  type="button" class="btnshort" id="btnCheckId" value="아이디 중복확인">
+                        </span>
+                    </div>
+                    <span id="checkIdResult"></span>
+
+                    <!-- PW1 -->
+                    <div>
+                        <h3 class="join_title"><label for="passwd1">Password</label></h3>
+                        <span class="box int_pass">
+                            <input type="password" id="passwd1" name = "user_passwd" class="int" maxlength="20" placeholder="영문, 숫자, 특수문자 조합 8글자 이상" required>
+                        </span>
+                        <span class="error_next_box"></span>
+                    </div>
+                
+                    <span id="checkPasswdResult"></span><br>
+                    <!-- PW2 -->
+                    <div>
+                        <h3 class="join_title"><label for="passwd2">Confirm Password</label></h3>
+                        <span class="box int_pass_check">
+                            <input type="password" id="passwd2" class="int" maxlength="20" placeholder="영문, 숫자, 특수문자 조합 8글자 이상" required>
+                        </span>
+                        <span class="error_next_box"></span>
+                    </div>
+
+                    
+
+                    <!-- EMAIL -->
+                    <div>
+                        <h3 class="join_title"><label for="user_email">Email</label></h3>
+                        <span class="box int_email">
+                            <input type="email" id="user_email" name="user_email" class="int" maxlength="100" placeholder="이메일">
+                        </span>
+                        <span class="error_next_box">이메일 주소를 다시 확인해주세요.</span>    
+                    </div>
+
+                    <!-- MOBILE -->
+                    <div>
+                        <h3 class="join_title"><label for="user_tel">Phone Number</label></h3>
+                        <span class="box int_mobile">
+                            <input type="tel" id="user_tel" name="user_tel"  class="int" maxlength="16" placeholder="01x-xxxx-xxxx">
+                        </span>
+                        <span class="error_next_box"></span>    
+                    </div>
+
+                    
+                    <!-- Birthday -->
+                    <div>
+                        <h3 class="join_title"><label for="user_birth">Birthday</label></h3>
+                        <span class="box int_email">
+                            <input type="email" id="user_birth" name="user_birth" class="int" maxlength="100" placeholder="xxxx-xx-xx">
+                        </span>
+                        <span class="error_next_box">생년월일을 다시 확인해주세요.</span>    
+                    </div>
+
+
+                    <h3 class="join_title">
+                        <label for="user_zipcode">우편번호</label>
+                    </h3>
+                    <div  class="short">
+                        <span class="box  int_id">
+                            <input type="text"  class="int"  name="user_zipcode" id="user_zipcode"  placeholder="우편번호" required>
+                        </span>
+                        <span>
+                            <input type="button" class="btnshort" id="btnAddr" value="주소찾기">
+                        </span>
+                      </div>
+            
+                      <div>
+                        <h3 class="join_title"><label for="user_addr">주소</label></h3>
+                        <span class="box int_mobile">
+                            <input type="text"  class="int"  name="user_addr" id="user_addr" placeholder="주소">
+                        </span>
+                      </div>
+                      
+                      <div>
+                        <h3 class="join_title"><label for="user_addr2">상세주소</label></h3>
+                        <span class="box int_mobile">
+                            <input type="text"  class="int"  name="user_addr2" id="user_addr2" placeholder="상세주소">
+                        </span>
+                      </div>
+
+                    <!-- JOIN BTN-->
+                    <div class="btn_area">
+                        <button type="button" id="btnSignUp" class="myButton">
+                            <span>가입하기</span>
+                        </button>
+                    </div>
+
+                </form>
+
+            </div> 
+            <!-- content-->
+
+        </div> 
+        <!-- wrapper -->
+
+
+
+        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>					
+        <script>
+        const form = document.querySelector("#frm");
+        const btnSignUp = document.querySelector("#btnSignUp");
+        
+        // 주소 찾기 관련
+        
+        function execDaumPostcode() {					
+            new daum.Postcode({					
+                oncomplete: function(data) {					
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.					
+                                    
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.					
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.					
+                var addr = ''; // 주소 변수					
+                var extraAddr = ''; // 참고항목 변수					
+                                    
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.					
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우					
+                    addr = data.roadAddress;					
+                } else { 							 // 사용자가 지번 주소를 선택했을 경우(J)					
+                    addr = data.jibunAddress;					
+                }											
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.					
+                document.getElementById('user_zipcode').value = data.zonecode;					
+                document.getElementById("user_addr").value = addr;					
+                // 커서를 상세주소 필드로 이동한다.					
+                document.getElementById("user_addr2").focus();					
+                }					
+            }).open();					
+        }			
+        document.querySelector("#btnAddr").addEventListener("click",execDaumPostcode);
+        
+        
+        
+        
+        // 입력 형식 유효성 검사
+         
+        let user_name = document.querySelector("#user_name");
+        let user_id = document.querySelector("#user_id");
+        let user_passwd = document.querySelector("#passwd1");
+        let user_passwd2 = document.querySelector("#passwd2");
+        let user_tel = document.querySelector("#user_tel");
+        let user_email = document.querySelector("#user_email");
+        let user_addr = document.querySelector("#user_addr");
+        let user_addr2 = document.querySelector("#user_addr2");
+        let user_birth = document.querySelector("#user_birth");
+        
+        
+        // 정규식 검사
+        function checkInput(){
+            
+            // 정규식 목록
+            const reg_name = /(^[가-힣]{1,4})$/; // 한글만, 1~4자
+            const reg_id = /^[a-z0-9_]{5,}$/; // 영문, 숫자 5자 이상
+            const reg_passwd = /^[a-z0-9`~!@#$%^&*()-_=+]{1,}$/;; // 영문, 숫자, 특수문자 8자 이상
+            const reg_tel = /^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$/; // 010-xxxx-xxxx
+            const reg_email = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i; 
+            const reg_birth = /^(19[0-9][0-9]|20\d{2})-(0[0-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/; // 19xx-xx-xx
+            let temp= false;
+            let result = true; // submit 시 각 정규식 충족여부 판단을 위한 값
+        
+            if(!reg_name.test(user_name.value) || user_name.value==""){
+                $(".modal-body").text("이름을 다시 입력하시오");
+                $("#myModal").modal("show");
+                user_name.focus();
+                result =  false;
+            } 
+            if(!reg_id.test(user_id.value) || user_id.value==""){
+                $(".modal-body").text("id를 다시 입력하시오");
+                $("#myModal").modal("show");
+                user_id.focus();
+                result =  false;
+            } 
+            if(!reg_passwd.test(user_passwd.value) || user_passwd.value==""){
+                $(".modal-body").text("패스워드를 다시 입력하시오");
+                $("#myModal").modal("show");
+                user_passwd.focus();
+                result =  false;
+        
+            } 
+            if(!reg_tel.test(user_tel.value) || user_tel.value==""){
+                $(".modal-body").text("휴대폰 번호를 다시 입력하시오");
+                $("#myModal").modal("show");
+                user_tel.focus();
+                result =  false;
+        
+            } 
+            if(!reg_birth.test(user_birth.value) || user_birth.value==""){
+                $(".modal-body").text("생년월일을 다시 입력하시오");
+                $("#myModal").modal("show");
+                user_birth.focus();
+                result =  false;
+        
+            } 
+            if(!reg_email.test(user_email.value) || user_email.value==""){
+                $(".modal-body").text("이메일을 다시 입력하시오");
+                $("#myModal").modal("show");
+                user_email.focus();
+                result =  false;
+            } 
+            if(user_addr.value==""){
+                $(".modal-body").text("주소를 입력하시오");
+                $("#myModal").modal("show");
+                user_addr.focus();
+                result =  false;
+            }
+            if(user_addr2.value==""){
+                $(".modal-body").text("상세주소를 입력하시오");
+                $("#myModal").modal("show");
+                user_addr2.focus();
+                result =  false;
+            }
+        
+            return result; // 하나라도 틀리면 false, 모두 맞아야만 true 반환
+            
+        }
+        
+        $("#btnHome").click(function(){ // 모달창)메인으로 click
+            location.href="/";
+        });
+        
+        $("#btnRetry").click(function(){ // 모달창)다시시도 click-> 모달창 닫기
+            $('#myModal').modal('hide');
+        });
+        
+        
+        
+        /* 
+         *비밀번호 확인
+         */
+        
+        function checkPasswd(){
+        
+            if(user_passwd.value == user_passwd2.value){
+                msg = "<span>비밀번호가 일치합니다.</span>";
+                return true;
+            } else {
+                msg = "<span style='color:red'>비밀번호가 일치하지 않습니다.</span>";
+                return false;
+            }
+            $("#checkPasswdResult").html(msg); 	
+            
+        }
+        
+        
+        /* 
+         * 생년월일 만 19세 이상 확인
+         */
+        
+        function checkAdult(){
+            let user_birth = document.querySelector("#user_birth").value;
+            let today = new Date();
+            let birthday = new Date(user_birth);
+            let age = today.getFullYear() - birthday.getFullYear();
+        
+            if (today.getTime() < birthday.getTime()) { // 생일 전이면 나이 -1
+                    age--;
+            }
+            
+            if(age < 19){
+                $(".modal-body").text("만 19세 미만은 회원가입할 수 없습니다.");
+                $("#myModal").modal("show");
+                return false;
+            } else {
+                return true;
+            }
+        }
+        
+        
+        
+        /* 
+         *  아이디 중복 검사
+         */
+         
+        
+        
+        /*
+        let click = false;
+        if(!form.user_id.readOnly){ // 중복클릭을 하지 않거나 아이디가 중복된 경우
+            $("#btnCheckId").on("click",function(){ 
+                click = true;
+                let dupl_result;
+                user_id = document.querySelector("#user_id");
+                
+                $.ajax({
+                    type:"GET",
+                    async: false, // ajax에서 return할 때 undefined가 리턴됨. 동기방식으로 변경하여 해결가능
+                    url:"/signUp/checkId?user_id="+user_id.value,
+                    success:function(result){ 
+                        let msg;
+                        if(result==true){ // 중복된 아이디가 있으면
+                            msg = "<span style='color:red'>동일한 아이디가 존재합니다.</span>";
+                            $("#checkIdResult").html(msg); 
+                            form.user_id.readOnly = false;
+                            temp = true;
+                            return temp;
+                        } else { // 중복된 아이디가 없으면
+                            msg = "<span>사용가능한 아이디 입니다.</span>";
+                            $("#checkIdResult").html(msg); 
+                            form.user_id.readOnly = true;
+                            temp = false; // false를 보내고 조건문을 빠져나옴
+                            return temp;
+                        }
+                    },
+                    error:function(e){
+                        console.log("checkId ajax err  :  "+e.getMessage);
+                        temp =  false;
+                        return temp;
+                    }
+            
+                });		
+        
+            });
+            $("#btnSignUp").on("click",function(){ 	
+                $(".modal-body").text("아이디 중복을 확인하세요.");
+                $("#myModal").modal("show");
+            });
+        } else {
+            if(checkId()){
+                $("#btnSignUp").on("click",function(){ 		// 회원가입 완료 클릭
+                    if(checkInput()===true && checkAdult()===true && checkPasswd()===true){ // 입력유효성검사, 만19세이상,비밀번호 확인
+                            document.querySelector("#frm").submit();	
+                    }				
+                });
+            }
+        }
+        */
+        
+            $( document ).ready(function() {
+                $('#user_id').change( function() {  // 입력값이 변경되면
+                      temp = false;					
+                    let msg = "<span style='color:red'>아이디 중복검사를 해주세요</span>";
+                    $("#checkIdResult").html(msg); 
+        
+                    $("#btnCheckId").on("click",function(){ // 중복확인 버튼을 클릭하면
+                        $.ajax({
+                            type:"GET",
+                            async: false, // ajax에서 return할 때 undefined가 리턴됨. 동기방식으로 변경하여 해결가능
+                            url:"/signUp/checkId?user_id="+user_id.value,
+                            success:function(result){ 
+                                let msg;
+                                if(result==true){ // 중복된 아이디가 있으면
+                                    msg = "<span style='color:red'>동일한 아이디가 존재합니다.</span>";
+                                    $("#checkIdResult").html(msg); 
+                                    temp = false;
+                                    return temp;
+                                } else { // 중복된 아이디가 없으면
+                                    msg = "<span>사용가능한 아이디 입니다.</span>";
+                                    $("#checkIdResult").html(msg); 
+                                    temp = true; // false를 보내고 조건문을 빠져나옴
+                                    return temp;
+                                }
+                                
+                            },
+                            error:function(e){
+                                console.log("checkId ajax err  :  "+e.getMessage);
+        
+                            }
+                        });	
+                        if(temp){ // 1. 입력값 변경 후 2. 중복확인 버튼을 클릭하고 3. 조회결과 중복아이디가 없는 경우
+                            $("#btnSignUp").on("click",function(){ 	
+                                // 회원가입 완료 클릭
+                                if(checkInput()===true && checkAdult()===true && checkPasswd()===true){ // 입력유효성검사, 만19세이상,비밀번호 확인
+                                        document.querySelector("#frm").submit();	
+                                }				
+                            });
+                        }	
+                    });
+                  });
+            });
+        
+        
+        
+        
+        
+                
+        </script>				
+    </body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"> <!-- default layout 사용 -->
+      
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css" integrity="sha384-9+PGKSqjRdkeAU7Eu4nkJU8RFaH8ace8HGXnkiKMP9I9Te0GJ4/km3L1Z8tXigpG" crossorigin="anonymous">
+
+<!-- 페이지의 개별적인 css, js 설정 영역 -->
+<style>
+.row{
+justify-content: center;
+text-align: center;
+}
+
+.container{
+width : 1000px;
+height: 500px;
+justify-content: center;
+text-align: center;
+
+
+}
+#frm{
+margin-top:50px;
+}
+
+.form-group{
+margin-bottom:3px;
+}
+
+.h2{
+margin-top:20px;
+}
+
+.text{
+margin-top:20px;
+}
+button{
+
+margin-top:20px;
+}
+</style>
+<!-- thymeleaf layout dialect가 content페이지의 head태그를 layout의 head태그에 자동으로 추가해준다. -->
+    <title>술핑몰</title>
+
+<!-- 페이지의 실제 content 내용 -->
+
+<div layout:fragment="contentFragment">
+
+    <!-- Hero Section Begin -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+
+<div class="container">
+	<h2>회원가입 완료</h2>
+	<p class="text text-primary"><b>[[${data}]]</b> 님 회원가입을 축하드립니다</p>
+	<button type="button" class="btn btn-outline-success" onclick="location.href='/login'">로그인</button>
+</div>
+
+
+
+
+            </div>
+        </div>
+    </section>
+    <!-- Blog Section End -->
+
+</div>
+</html>
